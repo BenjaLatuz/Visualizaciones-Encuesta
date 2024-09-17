@@ -7,7 +7,7 @@ import numpy as np
 df = pd.read_csv('Encuesta.csv')
 
 # Columnas a excluir (Marca temporal y Pregunta Abierta)
-columns_to_exclude = ['Marca temporal', 'Pregunta Abierta (Opcional):\n Basándote en tu experiencia, ¿Qué sugerencias tienes para mejorar la formación académica en el área de la computación?']
+columns_to_exclude = ['Marca temporal', 'Pregunta Abierta']
 
 # Seleccionar solo las columnas que no están excluidas (es decir, las numéricas)
 columns_to_melt = [col for col in df.columns if col not in columns_to_exclude]

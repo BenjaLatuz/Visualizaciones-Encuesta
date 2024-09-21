@@ -3,6 +3,39 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 
+# Configurar la página para usar el ancho completo
+st.set_page_config(layout="wide")
+
+# CSS personalizado para las tarjetas de métricas
+st.markdown("""
+<style>
+.card {
+    margin: 10px;
+    padding: 15px;
+    text-align: center;
+    color: black;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px grey;
+}
+.metric-name {
+    font-size: 16px;
+    color: #008080;  # Adjusted to a teal color for visibility
+    font-weight: bold;
+}
+.metric-value {
+    font-size: 26px;
+    color: black;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+.metric-freq {
+    font-size: 16px;
+    color: grey;
+}
+</style>
+""", unsafe_allow_html=True)
+
 # Cargar el archivo CSV
 df = pd.read_csv('Encuesta.csv')
 
@@ -22,16 +55,34 @@ tab1, tab2, tab3, tab4 = st.tabs(["Área de Software", "Área de Datos", "Área 
 with tab1:
     st.header("Área de Software")
     st.write("A continuación se muestran las visualizaciones asociadas a las respuestas de la encuesta en el área de Software")
+    st.title("Lenguajes de Programación más solicitados")
+
     
-    # Mostrar las primeras filas del resultado
-    st.write(melted_df)
+    # Datos de ejemplo para las métricas
+    technologies = [
+        {"name": "Python", "percentage": "85%", "frequency": "1200 times"},
+        {"name": "JavaScript", "percentage": "75%", "frequency": "1100 times"},
+        {"name": "SQL", "percentage": "65%", "frequency": "900 times"},
+        {"name": "Docker", "percentage": "55%", "frequency": "800 times"},
+        {"name": "AWS", "percentage": "50%", "frequency": "700 times"}
+    ]
+
+    # Crear métricas personalizadas en columnas
+    cols = st.columns(len(technologies))
+    
+    for col, tech in zip(cols, technologies):
+        col.markdown(f"""
+        <div class="card">
+            <div class="metric-name">{tech['name']}</div>
+            <div class="metric-value">{tech['percentage']}</div>
+            <div class="metric-freq">{tech['frequency']}</div>
+        </div>
+        """, unsafe_allow_html=True)
 
     ########################## FRONTEND #############################################################################
 
-    st.title("Desarrollo de Frontend")
-    preguntas_seleccionadas = [
-        'React', 'Vue', 'Angular', 'HTML y CSS'
-    ]
+   
+    preguntas_seleccionadas = ['React', 'Vue', 'Angular', 'HTML y CSS']
 
     # Filtrar las preguntas seleccionadas
     filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
@@ -43,33 +94,27 @@ with tab1:
     grouped_df = filtered_df.groupby(['Respuesta', 'Pregunta']).size().unstack(fill_value=0).reindex(index=respuesta_range, fill_value=0)
 
     # Crear el gráfico multibarra con respuestas en el eje x y preguntas como leyenda
-    fig, ax = plt.subplots(figsize=(10, 6))
+    fig, ax = plt.subplots(figsize=(6, 4))
     grouped_df.plot(kind='bar', stacked=False, ax=ax)
-
-    # Añadir títulos y etiquetas
-    ax.set_title('Desarrollo de Frontend', fontsize=16)
-    ax.set_xlabel('Respuestas')
-    ax.set_ylabel('Frecuencia')
+    ax.set_title('Desarrollo de Frontend', fontsize=10)
+    ax.set_xlabel('Respuestas', fontsize=8)
+    ax.set_ylabel('Frecuencia', fontsize=8)
     ax.set_xticks(range(len(grouped_df.index)))
     ax.set_xticklabels(grouped_df.index, rotation=0)
+    ax.legend(fontsize=7)
 
-    # Mostrar el gráfico en Streamlit
-    st.pyplot(fig)
-
-
-    ########################## FRONTEND #############################################################################
-
-     # Separar las secciones con una línea horizontal
-    st.markdown("---")
+    # Organizar gráficos en dos columnas
+    col1, col2 = st.columns(2)
+    with col1:
+        st.title("Desarrollo de Frontend")
+        st.pyplot(fig)
 
     ########################## Distintas Áreas #######################################################################
+
     
-    st.title("Distintas Áreas - Gráfico de Araña")
-    
-    # Definir las preguntas para las distintas áreas (puedes cambiar las preguntas)
-    preguntas_seleccionadas = [
-        'Metodologías Ágiles', 'QA', 'Arquitectura de Software', 'Control de Versiones', 'Despliegue de Aplicaciones', 'Diseño de Software'
-    ]
+
+    # Definir las preguntas para las distintas áreas
+    preguntas_seleccionadas = ['Metodologías Ágiles', 'QA', 'Arquitectura de Software', 'Control de Versiones', 'Despliegue de Aplicaciones', 'Diseño de Software']
 
     # Filtrar las preguntas seleccionadas
     filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
@@ -94,63 +139,42 @@ with tab1:
     angulos += angulos[:1]
 
     # Crear el gráfico de radar
-    fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
-
-    # Dibujar un polígono y los puntos
+    fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(polar=True))
     ax.fill(angulos, valores, color='#1f77b4', alpha=0.25)
     ax.plot(angulos, valores, color='#1f77b4', linewidth=2)
-
-    # Añadir las etiquetas de las categorías en los ángulos correspondientes
-    ax.set_xticks(angulos[:-1])  # No añadimos el último ángulo repetido a las etiquetas
-    ax.set_xticklabels(categorias)
-
-    # Rango de las etiquetas en el eje radial (0 a 5, ya que las respuestas están en ese rango)
+    ax.set_xticks(angulos[:-1])
+    ax.set_xticklabels(categorias, fontsize=7)
     ax.set_ylim(0, 5)
+    ax.set_title('Promedio de Respuestas por Distintas Áreas', fontsize=9)
 
-    # Añadir título
-    ax.set_title('Promedio de Respuestas por Distintas Áreas')
-
-    # Mostrar el gráfico en Streamlit
-    st.pyplot(fig)
-
-    ########################## FIN Distintas Áreas #######################################################################
-    # Separar las secciones con una línea horizontal
-    st.markdown("---")
+    with col2:
+        st.title("Distintas Áreas - Gráfico de Araña")
+        st.pyplot(fig)
 
 
 
+    ########################## FIN DISTINAS ÁREAS #######################################################################
 
-
-
-
-
-
-
-    ########################## Información Adicional #######################################################################
-    # Crear "cards" usando markdown
-    st.markdown("""
-    ### 🚀 Tecnologías Más Solicitadas:
-    - **Python**: 85%
-    - **JavaScript**: 75%
-    - **SQL**: 65%
-    - **Docker**: 55%
-    - **AWS**: 50%
-    """)
-
-    st.markdown("""
-    ### 🔧 Tecnologías DevOps:
-    - **Docker**: 55%
-    - **Kubernetes**: 45%
-    - **Jenkins**: 40%
-    """)
-
-    ########################## FIN Información Adicional #######################################################################
 
 
 # Contenido para la segunda hoja
 with tab2:
     st.header("Hoja 2")
     st.write("Aquí puedes poner contenido de la Hoja 2")
+ 
+    # Dividir en columnas
+    col1, col2, col3, col4, col5 = st.columns(5)
+    with col1:
+        st.metric(label="Documents", value="10.5K", delta="125")
+    with col2:
+        st.metric(label="Annotations", value="510", delta="-2")
+    with col3:
+        st.metric(label="Accuracy", value="87.9%", delta="0.1%")
+    with col4:
+        st.metric(label="Training Time", value="1.5 hours", delta="10 mins")
+    with col5:
+        st.metric(label="Processing Time", value="3 seconds", delta="-0.1 seconds")
+
     
 # Contenido para la tercera hoja
 with tab3:

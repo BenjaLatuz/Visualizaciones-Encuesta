@@ -20,7 +20,7 @@ st.markdown("""
 }
 .metric-name {
     font-size: 16px;
-    color: #008080;  # Adjusted to a teal color for visibility
+    color: #008080;
     font-weight: bold;
 }
 .metric-value {
@@ -55,17 +55,28 @@ tab1, tab2, tab3, tab4 = st.tabs(["Área de Software", "Área de Datos", "Área 
 with tab1:
     st.header("Área de Software")
     st.write("A continuación se muestran las visualizaciones asociadas a las respuestas de la encuesta en el área de Software")
-    st.title("Lenguajes de Programación más solicitados")
+    # Categorías para seleccionar
+    category_options = {
+        "Lenguajes de Programación": [
+            {"name": "Python", "percentage": "85%", "frequency": "1200 times"},
+            {"name": "JavaScript", "percentage": "75%", "frequency": "1100 times"},
+            {"name": "SQL", "percentage": "65%", "frequency": "900 times"},
+            {"name": "Docker", "percentage": "55%", "frequency": "800 times"}
+        ],
+        "Tecnologías Frontend": [
+            {"name": "React", "percentage": "85%", "frequency": "1200 times"},
+            {"name": "Angular", "percentage": "75%", "frequency": "1100 times"},
+            {"name": "Vue", "percentage": "65%", "frequency": "900 times"},
+            {"name": "HTML", "percentage": "55%", "frequency": "800 times"},
+            {"name": "CSS", "percentage": "50%", "frequency": "700 times"}
+        ]
+    }
 
-    
-    # Datos de ejemplo para las métricas
-    technologies = [
-        {"name": "Python", "percentage": "85%", "frequency": "1200 times"},
-        {"name": "JavaScript", "percentage": "75%", "frequency": "1100 times"},
-        {"name": "SQL", "percentage": "65%", "frequency": "900 times"},
-        {"name": "Docker", "percentage": "55%", "frequency": "800 times"},
-        {"name": "AWS", "percentage": "50%", "frequency": "700 times"}
-    ]
+    # Selector de categoría
+    selected_category = st.selectbox("Seleccione una categoría para ver los detalles:", list(category_options.keys()))
+
+    # Datos de la categoría seleccionada
+    technologies = category_options[selected_category]
 
     # Crear métricas personalizadas en columnas
     cols = st.columns(len(technologies))
@@ -174,6 +185,20 @@ with tab2:
         st.metric(label="Training Time", value="1.5 hours", delta="10 mins")
     with col5:
         st.metric(label="Processing Time", value="3 seconds", delta="-0.1 seconds")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
 # Contenido para la tercera hoja

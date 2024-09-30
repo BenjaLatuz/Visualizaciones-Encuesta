@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sns
+import matplotlib.ticker as mticker
 
 # Configurar la página para usar el ancho completo
 st.set_page_config(layout="wide")
@@ -183,30 +184,56 @@ with tab1:
 
     # Mostrar el número de página actual
     st.write(f"Página {st.session_state.current_page + 1} de {num_pages}")
-        ########################## FRONTEND ##################################################
 
-    preguntas_seleccionadas = ['React', 'Vue', 'Angular', 'HTML y CSS']
+    #Separador
+    st.markdown("<hr>", unsafe_allow_html=True)
 
-    filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
-    respuesta_range = [1, 2, 3, 4, 5]
-    grouped_df = filtered_df.groupby(['Respuesta', 'Pregunta']).size().unstack(fill_value=0).reindex(index=respuesta_range, fill_value=0)
+    ########################## FRONTEND y BACKEND ##########################
+    category_switch = {
+        "Frontend": ['React', 'Vue', 'Angular', 'HTML y CSS'],
+        "Backend": ['Spring Boot', 'Django', 'Rails', 'Nodejs']
+    }
 
-    fig, ax = plt.subplots(figsize=(6, 4))
-    grouped_df.plot(kind='bar', stacked=False, ax=ax)
-    ax.set_title('Desarrollo de Frontend', fontsize=10)
-    ax.set_xlabel('Respuestas', fontsize=8)
-    ax.set_ylabel('Frecuencia', fontsize=8)
-    ax.set_xticks(range(len(grouped_df.index)))
-    ax.set_xticklabels(grouped_df.index, rotation=0)
-    ax.legend(fontsize=7)
+    # Usar st.radio para seleccionar entre Frontend y Backend
+    selected_tech_category = st.radio(
+        "Seleccione una categoría", 
+        options=["Frontend", "Backend"], 
+        index=0, 
+        horizontal=True
+    )
 
-    col1, col2 = st.columns(2)
-    with col1:
-        st.title("Desarrollo de Frontend")
+    selected_technologies = category_switch[selected_tech_category]
+
+    # Filtrar el DataFrame según las tecnologías seleccionadas
+    filtered_df = melted_df[melted_df['Pregunta'].isin(selected_technologies)]
+
+    # Agrupar los datos por Respuesta y Pregunta para contar las frecuencias
+    grouped_df = filtered_df.groupby(['Respuesta', 'Pregunta']).size().unstack(fill_value=0)
+
+
+    ########################## Distribución de los gráficos ##########################
+    col3, col4 = st.columns(2)  # Crear dos columnas para alinear los gráficos
+
+    # Gráfico de barras (Frontend/Backend)
+    with col3:
+        fig, ax = plt.subplots(figsize=(6, 4))
+        grouped_df.plot(kind='bar', stacked=False, ax=ax)
+        ax.set_title(f'Desarrollo de {selected_tech_category}', fontsize=10)
+        ax.set_xlabel('Respuestas', fontsize=8)
+        ax.set_ylabel('Frecuencia', fontsize=8)
+        ax.set_xticks(range(len(grouped_df.index)))
+        ax.set_xticklabels(grouped_df.index, rotation=0)
+        ax.legend(fontsize=7)
+
+        # Asegurar que el eje Y solo use números enteros y empiece en cero
+        ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
+        ax.set_ylim(bottom=0)  # Establecer el límite inferior en 0
+        ax.set_ylim(0, max(grouped_df.max()) + 1)  # Ajustar el límite superior según el valor máximo
+
+        # Mostrar el gráfico en Streamlit
         st.pyplot(fig)
 
-    ########################## Distintas Áreas ##################################################
-
+    ########################## Gráfico de Araña (Distintas Áreas) ##########################
     preguntas_seleccionadas = ['Metodologías Ágiles', 'QA', 'Arquitectura de Software', 'Control de Versiones', 'Despliegue de Aplicaciones', 'Diseño de Software']
     filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
     mean_responses = filtered_df.groupby('Pregunta')['Respuesta'].mean()
@@ -218,18 +245,19 @@ with tab1:
     angulos = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
     angulos += angulos[:1]
 
-    fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(polar=True))
-    ax.fill(angulos, valores, color='#1f77b4', alpha=0.25)
-    ax.plot(angulos, valores, color='#1f77b4', linewidth=2)
-    ax.set_xticks(angulos[:-1])
-    ax.set_xticklabels(categorias, fontsize=7)
-    ax.set_ylim(0, 5)
-    ax.set_title('Promedio de Respuestas por Distintas Áreas', fontsize=9)
+    with col4:
+        fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(polar=True))
+        ax.fill(angulos, valores, color='#1f77b4', alpha=0.25)
+        ax.plot(angulos, valores, color='#1f77b4', linewidth=2)
+        ax.set_xticks(angulos[:-1])
+        ax.set_xticklabels(categorias, fontsize=7)
+        ax.set_ylim(0, 5)
+        ax.set_title('Promedio de Respuestas por Distintas Áreas', fontsize=9)
 
-    with col2:
-        st.title("Distintas Áreas - Gráfico de Araña")
         st.pyplot(fig)
 
+    #Separador
+    st.markdown("<hr>", unsafe_allow_html=True)
     ########################## Lenguajes de Programación + SQL ##########################
 
     col3, col4 = st.columns(2)
@@ -261,8 +289,6 @@ with tab1:
         ax.bar(['A', 'B', 'C'], [10, 20, 30])
         st.pyplot(fig)
         st.markdown('</div>', unsafe_allow_html=True)
-    # Contenido para la segunda hoja
-
 
 
 

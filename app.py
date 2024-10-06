@@ -2,50 +2,82 @@ import streamlit as st
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
-import seaborn as sns
-import matplotlib.ticker as mticker
+import plotly.graph_objects as go
 
-# Configurar la página para usar el ancho completo
-st.set_page_config(layout="wide")
+# Configurar el tema de Streamlit
+st.set_page_config(
+    page_title="Dashboard de Encuesta",
+    page_icon="📊",
+    layout="wide",
+    initial_sidebar_state="expanded")
+
 
 # CSS para ajustar el color de fondo, el estilo de las tarjetas y el color de texto
 st.markdown("""
 <style>
 html, body, [class*="ViewContainer"] {
-    color: #ddd; /* Color de texto claro */
-    background-color: #1c1f26; /* Ajusta el fondo oscuro */
+    color: #ddd;
+    background-color: #1c1f26;
 }
-.card {
+.metric {
     margin: 10px;
     padding: 15px;
     text-align: center;
-    color: #ddd; /* Color de texto dentro de las tarjetas para contraste con el fondo claro */
-    background-color: #2a2d35; /* Fondo oscuro para las tarjetas */
+    color: #ddd;
+    background-color: #2a2d35;
     border-radius: 10px;
     box-shadow: 2px 2px 10px grey;
 }
 .metric-name {
     font-size: 16px;
-    color: #4caf50; /* Color verde claro para los nombres métricos */
+    color: #4caf50;
     font-weight: bold;
 }
 .metric-value {
     font-size: 26px;
-    color: #fff; /* Texto blanco para valores métricos */
+    color: #fff;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 .metric-freq {
     font-size: 16px;
-    color: #ccc; /* Gris claro para la frecuencia */
+    color: #ccc;
 }
 .box {
-    border: 1px solid #555; /* Borde más oscuro para las cajas */
+    border: 1px solid #555;
     padding: 10px;
     margin: 10px 0;
     border-radius: 10px;
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-    background-color: #333; /* Fondo más oscuro para las cajas */
+    background-color: #333;
+}
+            
+.card-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+.card {
+    flex: 1 0 30%;
+    margin: 10px;
+    padding: 15px;
+    text-align: center;
+    color: #ddd;
+    background-color: #2a2d35;
+    border-radius: 10px;
+    box-shadow: 2px 2px 10px grey;
+    min-width: 250px;
+}
+.card-title {
+    font-size: 20px;
+    color: #4caf50;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+.card-text {
+    font-size: 16px;
+    color: #ccc;
+    line-height: 1.6;
 }
 </style>
 """, unsafe_allow_html=True)
@@ -78,12 +110,15 @@ columns_to_melt = [col for col in df.columns if col not in columns_to_exclude]
 melted_df = pd.melt(df.drop(columns=columns_to_exclude), var_name='Pregunta', value_name='Respuesta')
 
 # Crear las pestañas
-tab1, tab2, tab3, tab4 = st.tabs(["Área de Software", "Área de Datos", "Área de Sistemas", "Hoja 4"])
+tab1, tab2 = st.tabs(["Área de Software", "Área de Datos"])
 
 # Contenido para la primera hoja
 with tab1:
-    st.header("Dashboard de Visualizaciones")
-    st.write("A continuación se muestran las visualizaciones asociadas a las respuestas de la encuesta en el área de Software")
+    st.title("Dashboard de Visualizaciones")
+    st.write("A continuación se muestran las visualizaciones asociadas a las respuestas de la encuesta, y con las tecnologías más demandadas en el mercado laboral.")
+    st.markdown("<hr>", unsafe_allow_html=True)
+    st.header("Demandas del Mercado Laboral")
+    st.write("Aquí se muestra la demanda de tecnologías, habilidades, herramientas y conocimientos categorizadas por distintas áreas de la ingeniería en computación. Se puede navegar entre las categorías, y algunas contienen más de una página, por lo que se puede avanzar y retroceder entre ellas.")
     
     # Selector de categoría
     # Se buscará que si hay muchas tecnologías asociadas, haya un scroll horizontal
@@ -129,7 +164,27 @@ with tab1:
             {"name": "Azure", "percentage": "17%", "frequency": "111 veces mencionado en 640 ofertas totales"},
             {"name": "Google Cloud Platform", "percentage": "13%", "frequency": "84 veces mencionado en 640 ofertas totales"}
             
+        ],
+        "Herramientas y Tecnologías de Análisis, Procesamiento y Visualización de Datos": [
+            {"name": "PowerBI", "percentage": "35%", "frequency": "79 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+            {"name": "Tableau", "percentage": "14%", "frequency": "33 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+            {"name": "Apache Spark", "percentage": "14%", "frequency": "33 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+            {"name": "Apache Hadoop", "percentage": "9%", "frequency": "20 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+            {"name": "Looker", "percentage": "7%", "frequency": "15 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+        ],
+        "Conceptos y Áreas de la Ingeniería de Datos": [
+            {"name": "Procesos ETL", "percentage": "30%", "frequency": "68 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+            {"name": "Machine Learning", "percentage": "26%", "frequency": "59 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+            {"name": "Big Data", "percentage": "20%", "frequency": "46 veces mencionado en 229 ofertas de Ingeniería de Datos"},
+            {"name": "Inteligencia Artificial", "percentage": "15%", "frequency": "34 veces mencionado en 229 ofertas de Ingeniería de Datos"}
         ]
+        #"Habilidades Profesionales": [
+        #    {"name": "Trabajo en Equipo", "percentage": "10%", "frequency": "64 veces mencionado en 640 ofertas totales"},
+        #    {"name": "Habilidades de Comunicación", "percentage": "7%", "frequency": "46 veces mencionado en 640 ofertas totales"},
+        #    {"name": "Resolución de Problemas", "percentage": "6%", "frequency": "39 veces mencionado en 640 ofertas totales"},
+        #    {"name": "Gestión de Proyectos", "percentage": "5%", "frequency": "33 veces mencionado en 640 ofertas totales"},
+        #    {"name": "Toma de Decisiones", "percentage": "5%", "frequency": "31 veces mencionado en 640 ofertas totales"}
+        #]
     }
     # Crear un estado para la página actual y la categoría seleccionada
     if 'current_page' not in st.session_state:
@@ -158,12 +213,10 @@ with tab1:
     col1, col2, col3 = st.columns([1, 8, 1])
 
     with col1:
-        if st.button("Anterior") and st.session_state.current_page > 0:
-            st.session_state.current_page -= 1
+        st.button("Anterior", disabled=st.session_state.current_page == 0, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page - 1))
 
     with col3:
-        if st.button("Siguiente") and st.session_state.current_page < num_pages - 1:
-            st.session_state.current_page += 1
+        st.button("Siguiente", disabled=st.session_state.current_page >= num_pages - 1, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page + 1))
 
     # Calcular el índice de inicio y final para mostrar las tecnologías de la página actual
     start_idx = st.session_state.current_page * num_items_per_page
@@ -175,127 +228,313 @@ with tab1:
         if start_idx + idx < len(technologies):
             tech = technologies[start_idx + idx]
             col.markdown(f"""
-            <div class="card">
+            <div class="metric">
                 <div class="metric-name">{tech['name']}</div>
                 <div class="metric-value">{tech['percentage']}</div>
                 <div class="metric-freq">{tech['frequency']}</div>
             </div>
             """, unsafe_allow_html=True)
-
     # Mostrar el número de página actual
     st.write(f"Página {st.session_state.current_page + 1} de {num_pages}")
 
     #Separador
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    ########################## FRONTEND y BACKEND ##########################
-    category_switch = {
-        "Frontend": ['React', 'Vue', 'Angular', 'HTML y CSS'],
-        "Backend": ['Spring Boot', 'Django', 'Rails', 'Nodejs']
-    }
+    st.header("Visualización de Respuestas Encuesta: Sección Ofertas Laborales")
+    st.write("Aquí se muestran las visualizaciones interactivas de las respuestas de la encuesta sobre las ofertas laborales, categorizadas por distintas áreas y aspectos de la ingeniería en computación. Algunas categorías contienen más de un gráfico, y puedes seleccionar cuál deseas ver utilizando los botones disponibles. Recordar que las respuestas de la encuesta están en una escala de 1 a 5, donde 1 es 'Muy poco competente' y 5 es 'Muy competente'.")
+    #Separador
+    st.markdown("<hr>", unsafe_allow_html=True)
 
-    # Usar st.radio para seleccionar entre Frontend y Backend
-    selected_tech_category = st.radio(
-        "Seleccione una categoría", 
-        options=["Frontend", "Backend"], 
-        index=0, 
-        horizontal=True
-    )
-
-    selected_technologies = category_switch[selected_tech_category]
-
-    # Filtrar el DataFrame según las tecnologías seleccionadas
-    filtered_df = melted_df[melted_df['Pregunta'].isin(selected_technologies)]
-
-    # Agrupar los datos por Respuesta y Pregunta para contar las frecuencias
-    grouped_df = filtered_df.groupby(['Respuesta', 'Pregunta']).size().unstack(fill_value=0)
-
+    ########################## Títulos para cada columna ##########################
+    col1, col2 = st.columns(2)
 
     ########################## Distribución de los gráficos ##########################
     col3, col4 = st.columns(2)  # Crear dos columnas para alinear los gráficos
+    
+    with col1:
+        st.header("Frecuencia de Competencia en Tecnologías Backend y Frontend")
+        # Usar st.radio para seleccionar entre Frontend y Backend
+        selected_tech_category = st.radio(
+            "Seleccione una categoría", 
+            options=["Frontend", "Backend"], 
+            index=0, 
+            horizontal=True
+        )
 
     # Gráfico de barras (Frontend/Backend)
     with col3:
-        fig, ax = plt.subplots(figsize=(6, 4))
-        grouped_df.plot(kind='bar', stacked=False, ax=ax)
-        ax.set_title(f'Desarrollo de {selected_tech_category}', fontsize=10)
-        ax.set_xlabel('Respuestas', fontsize=8)
-        ax.set_ylabel('Frecuencia', fontsize=8)
-        ax.set_xticks(range(len(grouped_df.index)))
-        ax.set_xticklabels(grouped_df.index, rotation=0)
-        ax.legend(fontsize=7)
+        ########################## FRONTEND y BACKEND ##########################
+        category_switch = {
+            "Frontend": ['React', 'Vue', 'Angular', 'HTML y CSS'],
+            "Backend": ['Spring Boot', 'Django', 'Rails', 'Nodejs (Frameworks)']
+        }
 
-        # Asegurar que el eje Y solo use números enteros y empiece en cero
-        ax.yaxis.set_major_locator(mticker.MaxNLocator(integer=True))
-        ax.set_ylim(bottom=0)  # Establecer el límite inferior en 0
-        ax.set_ylim(0, max(grouped_df.max()) + 1)  # Ajustar el límite superior según el valor máximo
+        selected_technologies = category_switch[selected_tech_category]
+
+        # Filtrar el DataFrame según las tecnologías seleccionadas
+        filtered_df = melted_df[melted_df['Pregunta'].isin(selected_technologies)]
+
+        # Agrupar los datos por Respuesta y Pregunta para contar las frecuencias
+        grouped_df = filtered_df.groupby(['Respuesta', 'Pregunta']).size().unstack(fill_value=0)
+
+
+        fig = go.Figure()
+
+        # Añadir cada tecnología como un conjunto de barras
+        for tecnologia in grouped_df.columns:
+            fig.add_trace(go.Bar(
+                x=grouped_df.index,  # Eje X serán las respuestas
+                y=grouped_df[tecnologia],  # Eje Y serán las frecuencias
+                name=tecnologia
+            ))
+
+        # Ajustar el layout del gráfico
+        fig.update_layout(
+            title=dict(text=f'Desarrollo de {selected_tech_category}', font=dict(size=18)),
+            xaxis_title=dict(text='Respuestas', font=dict(size=18)),
+            yaxis_title=dict(text='Frecuencia', font=dict(size=18)),
+            legend=dict(font=dict(size=14)),  # Aumenta el tamaño de la leyenda
+            barmode='group',  # Estilo multibarra
+            yaxis=dict(tickmode='linear', tickfont=dict(size=18)),  # Solo enteros en el eje Y, ajustar tamaño de los ticks
+            xaxis=dict(tickfont=dict(size=18)),  # Ajustar tamaño de las etiquetas del eje X
+            plot_bgcolor='#1c1f26',  # Fondo oscuro como tu estilo de Streamlit
+            paper_bgcolor='#1c1f26',
+            font=dict(color='#ddd'),
+            height=600,
+            width=600  # Ajustar tamaño para asegurar que se vea bien en pantallas grandes y pequeñas
+        )
 
         # Mostrar el gráfico en Streamlit
-        st.pyplot(fig)
+        st.plotly_chart(fig, use_container_width=True)
 
-    ########################## Gráfico de Araña (Distintas Áreas) ##########################
-    preguntas_seleccionadas = ['Metodologías Ágiles', 'QA', 'Arquitectura de Software', 'Control de Versiones', 'Despliegue de Aplicaciones', 'Diseño de Software']
-    filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
-    mean_responses = filtered_df.groupby('Pregunta')['Respuesta'].mean()
+    with col2:
+        st.header("Competencia Promedio en distintos aspectos de la Ingeniería en Computación")
+        
+        # Definir las categorías
+        categorias_disponibles = {
+            "Ingeniería de Software": ['Metodologías Ágiles', 'Arquitectura de Software', 'QA', 'Control de Versiones', 'Despliegue de Aplicaciones', 'Diseño de Software'],
+            "Ingeniería de Datos": ['BD Relacionales', 'BD No Relacionales', 'Machine Learning', 'Procesos ETL', 'IA (LLM NLP RN)', 'Big Data', 'Análisis de Datos'],
+            "Ingeniería de Sistemas (+ Cloud y Habilidades Profesionales)": ['Redes','Ciberseguridad','Virtualización', 'Windows', 'Linux','Cloud','Habilidades Profesionales']
+        }
 
-    categorias = mean_responses.index.tolist()
-    valores = mean_responses.values
-    valores = np.append(valores, valores[0])
-    num_vars = len(categorias)
-    angulos = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
-    angulos += angulos[:1]
+        # Crear un control radio en col2 para seleccionar la categoría
+        categoria_seleccionada = st.radio(
+            "Seleccione una categoría para visualizar:", 
+            list(categorias_disponibles.keys()), 
+            horizontal=True
+        )
 
     with col4:
-        fig, ax = plt.subplots(figsize=(4, 4), subplot_kw=dict(polar=True))
-        ax.fill(angulos, valores, color='#1f77b4', alpha=0.25)
-        ax.plot(angulos, valores, color='#1f77b4', linewidth=2)
-        ax.set_xticks(angulos[:-1])
-        ax.set_xticklabels(categorias, fontsize=7)
-        ax.set_ylim(0, 5)
-        ax.set_title('Promedio de Respuestas por Distintas Áreas', fontsize=9)
+        # Obtener las preguntas basadas en la categoría seleccionada
+        preguntas_seleccionadas = categorias_disponibles[categoria_seleccionada]
 
-        st.pyplot(fig)
+        # Filtrar el DataFrame para incluir las preguntas seleccionadas
+        filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
+        mean_responses = filtered_df.groupby('Pregunta')['Respuesta'].mean()
+
+        categorias = mean_responses.index.tolist()
+        valores = mean_responses.values
+        valores = np.append(valores, valores[0])
+        num_vars = len(categorias)
+        angulos = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+        angulos += angulos[:1]
+
+        # Crear un gráfico de radar con Plotly
+        fig_radar = go.Figure()
+
+        fig_radar.add_trace(go.Scatterpolar(
+            r=valores,
+            theta=categorias + [categorias[0]],  # Cerrar el círculo
+            fill='toself',
+            fillcolor='rgba(31, 119, 180, 0.3)',  # Color azul con transparencia
+            line=dict(color='rgba(31, 119, 180, 1)'),  # Color de la línea azul
+            name='Promedio'
+        ))
+
+        # Ajustar el layout del gráfico de radar
+        fig_radar.update_layout(
+            polar=dict(
+                radialaxis=dict(
+                    visible=True,
+                    range=[0, 6],
+                    tickvals=[0, 1, 2, 3, 4, 5],  # Asegurar que se muestren todas las divisiones
+                    ticktext=['0', '1', '2', '3', '4', '5'],  # Mostrar los valores de 0 a 5
+                    showline=False,  # Ocultar líneas radiales
+                    gridcolor='#555',  # Color de las líneas del grid
+                    tickfont=dict(size=14),  # Ajustar el tamaño de letra del eje radial
+                ),
+                angularaxis=dict(
+                    showline=False,
+                    gridcolor='#555',  # Color de las líneas del grid angular
+                    tickfont=dict(size=14)  # Ajustar el tamaño de letra en los ejes angulares (categorías)
+                ),
+                bgcolor='#1c1f26',  # Fondo del radar para que coincida con el estilo oscuro
+            ),
+            title=dict(text=f"Promedio de Respuestas por {categoria_seleccionada}", font=dict(size=18)),  # Título ajustado
+            plot_bgcolor='#1c1f26',
+            paper_bgcolor='#1c1f26',
+            font=dict(color='#ddd'),
+            margin=dict(l=115, r=115, t=115, b=115),  # Aumentar márgenes laterales
+            height=600,
+            width=800  # Ajustar el tamaño como desees
+        )
+
+        # Mostrar el gráfico de radar en Streamlit
+        st.plotly_chart(fig_radar, use_container_width=True)
+
+
 
     #Separador
-    st.markdown("<hr>", unsafe_allow_html=True)
-    ########################## Lenguajes de Programación + SQL ##########################
+    #st.markdown("<hr>", unsafe_allow_html=True)
 
-    col3, col4 = st.columns(2)
+    ########################## Títulos para cada columna ##########################
+    col1, col2 = st.columns(2)
+    ########################## Distribución de los gráficos ##########################
+    col3, col4 = st.columns(2)  # Crear dos columnas para alinear los gráficos
 
+    with col1:
+        st.header("Competencia Promedio en Lenguajes de Programación (+SQL) y Herramientas de Visualización de Datos")
+
+    ########################## Lenguajes de Programación + SQL ##########################    
     with col3:
-        st.markdown('<div class="box">', unsafe_allow_html=True)
-        st.title("Mapa de Calor - Competencia en Lenguajes de Programación")
-        
-        preguntas_seleccionadas_1 = ['Python (Software)', 'R', 'Java', 'JavaScript', 'TypeScript', 'Python (Datos)', 'Ruby Go C', 'SQL']
+        # Seleccionar las preguntas para el mapa de calor
+        preguntas_seleccionadas_1 = ['Python (Software)', 'R', 'Java', 'JavaScript', 'TypeScript', 'Python (Datos)', 'Ruby Go C', 'SQL', 'PowerBI', 'Tableau']
         filtered_df_1 = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas_1)]
+
+        # Calcular el promedio de respuestas para cada lenguaje de programación
         mean_responses_1 = filtered_df_1.groupby('Pregunta')['Respuesta'].mean()
 
-        heatmap_data = mean_responses_1.reset_index()
+        # Crear una matriz pivot para el mapa de calor y ordenar de mayor a menor por el promedio
+        heatmap_data = mean_responses_1.reset_index().sort_values(by='Respuesta', ascending=False)  # Ordenar por el valor promedio
         heatmap_data = heatmap_data.pivot_table(index='Pregunta', values='Respuesta')
 
-        plt.figure(figsize=(6, 4))
-        sns.heatmap(heatmap_data, annot=True, cmap="YlGnBu", linewidths=.5)
-        plt.title('Mapa de Calor de Competencia en Lenguajes de Programación', fontsize=12)
-        plt.xlabel('Competencias', fontsize=10)
-        plt.ylabel('Lenguajes de Programación', fontsize=10)
+        # Convertir la matriz a una lista de valores para el heatmap en Plotly
+        z_data = heatmap_data.values
+        y_labels = heatmap_data.index.tolist()  # Esto ahora está ordenado por los valores promedio
 
-        st.pyplot(plt)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Eje X artificial para mostrar la competencia promedio
+        x_labels = ['Promedio']
+
+        # Crear el gráfico de heatmap con Plotly
+        fig = go.Figure()
+
+        # Agregar heatmap
+        fig.add_trace(go.Heatmap(
+            z=z_data,
+            x=x_labels,  # Eje X artificial
+            y=y_labels,  # Lenguajes de programación en el eje Y (ordenado por promedio)
+            colorscale='balance',  # Escala de colores
+            showscale=True,  # Mostrar la barra de colores
+            hoverongaps=False,  # No mostrar espacios en blanco
+            zmin=2,  # Ajuste de mínimo para el rango de colores
+            zmax=5   # Ajuste de máximo para el rango de colores
+        ))
+
+        # Añadir anotaciones de texto dentro de las celdas del heatmap
+        for i in range(len(y_labels)):
+            fig.add_trace(go.Scatter(
+                x=[x_labels[0]],  # Un solo punto en el eje X
+                y=[y_labels[i]],  # Puntos en el eje Y para cada etiqueta
+                mode='text',
+                text=[f'{z_data[i][0]:.2f}'],  # Mostrar el valor formateado
+                textfont=dict(color='black' if z_data[i][0] > 3 and z_data[i][0] < 4  else 'white'),  # Color del texto (dependiendo del fondo)
+                textposition="middle center",
+                showlegend=False  # Deshabilitar leyenda para este scatter
+            ))
+
+        # Ajustar el layout del gráfico
+        fig.update_layout(
+            xaxis_title="Competencia",  # Etiqueta para el eje X
+            yaxis_title="Lenguajes y Herramientas",  # Etiqueta para el eje Y
+            xaxis=dict(tickfont=dict(size=18)),
+            yaxis=dict(tickfont=dict(size=18)),
+            height=600,  # Ajustar el tamaño del gráfico
+            width=800,
+            plot_bgcolor='#1c1f26',
+            paper_bgcolor='#1c1f26',
+            font=dict(color='#ddd'),  # Asegurarse de que el texto sea visible
+            showlegend=False  # Deshabilitar todas las leyendas
+        )
+
+        # Mostrar el gráfico en Streamlit
+        st.plotly_chart(fig, use_container_width=True)
+
+    with col2:
+        st.header("Otra Visualización")
 
     with col4:
-        st.markdown('<div class="box">', unsafe_allow_html=True)
-        st.title("Otra Visualización")
-        fig, ax = plt.subplots()
-        ax.bar(['A', 'B', 'C'], [10, 20, 30])
-        st.pyplot(fig)
-        st.markdown('</div>', unsafe_allow_html=True)
+        # Seleccionar las preguntas para el boxplot
+        preguntas_seleccionadas = ['Python (Software)', 'R', 'Java', 'JavaScript', 'TypeScript', 'Python (Datos)', 'Ruby Go C', 'SQL', 'PowerBI', 'Tableau']
+
+        # Filtrar el DataFrame para las preguntas seleccionadas
+        filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
+
+        # Crear el boxplot con Plotly
+        fig_boxplot = go.Figure()
+
+        # Añadir un boxplot para cada tecnología
+        for pregunta in preguntas_seleccionadas:
+            fig_boxplot.add_trace(go.Box(
+                y=filtered_df[filtered_df['Pregunta'] == pregunta]['Respuesta'],
+                name=pregunta,  # Nombre de la tecnología
+                boxpoints='all',  # Mostrar todos los puntos
+                jitter=0.3,  # Separar ligeramente los puntos
+                pointpos=-1.8  # Posición de los puntos
+            ))
+
+        # Ajustar el layout
+        fig_boxplot.update_layout(
+            title="Distribución de Competencias por Tecnología",
+            xaxis_title="Tecnologías",
+            yaxis_title="Nivel de Competencia (1-5)",
+            plot_bgcolor='#1c1f26',
+            paper_bgcolor='#1c1f26',
+            font=dict(color='#ddd'),
+            height=600,
+            width=800
+        )
+
+        # Mostrar el gráfico en Streamlit
+        st.plotly_chart(fig_boxplot, use_container_width=True)
+
+    st.markdown("<hr>", unsafe_allow_html=True)
+
+    st.header("Visualización de Respuestas Encuesta: Sección Perfil de Egreso")
+    st.write("En esta sección se presentan las visualizaciones de las respuestas de la encuesta sobre el perfil de egreso. Las competencias están categorizadas por Fundamentos de la Computación, Ingeniería de Datos, Ingeniería de Software y Sistemas, evaluando el nivel de preparación de los egresados en cada área. Recuerda que las respuestas están en una escala de 1 a 5, donde 1 significa 'Muy poco competente' y 5 representa 'Muy competente'.")    #Separador
+    st.markdown("<hr>", unsafe_allow_html=True)
 
 
 
 
 
+    st.markdown("<hr>", unsafe_allow_html=True)
 
+    st.header("Sugerencias para Mejorar la Formación Académica")
+    st.write("A continuación se muestran algunas de las sugerencias que fueron mencionadas por los encuestados para mejorar la formación académica en la carrera de Ingeniería en Computación.")
+    # Lista de sugerencias con títulos y texto
+    sugerencias = [
+    {"title": "Enfoque en Tecnologías y Lenguajes del Mundo Laboral", "text": "Talleres prácticos con lenguajes de programación y tecnologías relevantes en el mundo laboral, actualizando cursos con nuevas tecnologías y evitando centrarse solo en Python o C/C++."},
+    {"title": "Malla Curricular con Especializaciones","text": "Materializar las distintas líneas de especialización en la malla curricular, garantizando que los estudiantes adquieran conocimientos especializados en alguna área clave de la computación, sin dejar a la suerte del estudiante la elección de ramos optativos para completar la malla."},
+    {"title": "Conexión Teoría-Práctica a través de Proyectos Reales", "text": "Desafiar a los estudiantes a aplicar conocimientos en más proyectos reales durante la carrera, conectando la teoría con la práctica y permitiendo que desarrollen soluciones que los preparen directamente para su futuro profesional."}
+    ]   
+    # Mostrar sugerencias en tarjetas con títulos
+    st.markdown('<div class="card-container">', unsafe_allow_html=True)
+    # Crear columnas para las tarjetas
+    num_cols = 3  # Número de columnas por fila
 
+    # Dividir las sugerencias en grupos de 3 para cada fila de columnas
+    for i in range(0, len(sugerencias), num_cols):
+        cols = st.columns(num_cols)  # Crear las columnas
+
+        # Iterar sobre las sugerencias y asignar a las columnas
+        for j, sugerencia in enumerate(sugerencias[i:i+num_cols]):
+            with cols[j]:
+                st.markdown(f"""
+                <div class="card">
+                    <div class="card-title">{sugerencia['title']}</div>
+                    <div class="card-text">{sugerencia['text']}</div>
+                </div>
+                """, unsafe_allow_html=True)
 
 
 
@@ -315,30 +554,3 @@ with tab2:
         st.metric(label="Training Time", value="1.5 hours", delta="10 mins")
     with col5:
         st.metric(label="Processing Time", value="3 seconds", delta="-0.1 seconds")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
-# Contenido para la tercera hoja
-with tab3:
-    st.header("Hoja 3")
-    st.write("Aquí puedes poner contenido de la Hoja 3")
-
-# Contenido para la cuarta hoja
-with tab4:
-    st.header("Hoja 4")
-    st.write("Aquí puedes poner contenido de la Hoja 4")

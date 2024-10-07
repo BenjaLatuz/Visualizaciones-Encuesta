@@ -109,14 +109,15 @@ columns_to_melt = [col for col in df.columns if col not in columns_to_exclude]
 # Hacer el unpivot (melt) de las columnas con respuestas numéricas, excluyendo Marca temporal y Pregunta Abierta
 melted_df = pd.melt(df.drop(columns=columns_to_exclude), var_name='Pregunta', value_name='Respuesta')
 
+st.title("Dashboard de Visualizaciones")
+st.write("A continuación se muestran las visualizaciones asociadas a las respuestas de la encuesta, y con las tecnologías más demandadas en el mercado laboral.")
+
+
 # Crear las pestañas
-tab1, tab2 = st.tabs(["Área de Software", "Área de Datos"])
+tab1, tab2 = st.tabs(["Ofertas Laborales", "Perfil de Egreso"])
 
 # Contenido para la primera hoja
 with tab1:
-    st.title("Dashboard de Visualizaciones")
-    st.write("A continuación se muestran las visualizaciones asociadas a las respuestas de la encuesta, y con las tecnologías más demandadas en el mercado laboral.")
-    st.markdown("<hr>", unsafe_allow_html=True)
     st.header("Demandas del Mercado Laboral")
     st.write("Aquí se muestra la demanda de tecnologías, habilidades, herramientas y conocimientos categorizadas por distintas áreas de la ingeniería en computación. Se puede navegar entre las categorías, y algunas contienen más de una página, por lo que se puede avanzar y retroceder entre ellas.")
     
@@ -319,7 +320,7 @@ with tab1:
 
         # Crear un control radio en col2 para seleccionar la categoría
         categoria_seleccionada = st.radio(
-            "Seleccione una categoría para visualizar:", 
+            "Seleccione una categoría:", 
             list(categorias_disponibles.keys()), 
             horizontal=True
         )
@@ -460,55 +461,137 @@ with tab1:
         st.plotly_chart(fig, use_container_width=True)
 
     with col2:
-        st.header("Otra Visualización")
+        st.header("Promedio de Competencia por Área")
+        st.write("""
+        A continuación se muestra el promedio de competencia por área de la ingeniería en computación. Las áreas consideradas son Ingeniería de Software, Ingeniería de Datos y Sistemas. 
 
+        Este análisis incluye todas las preguntas relacionadas con ofertas laborales de la encuesta. Además, se ha considerado que las competencias en **Habilidades Profesionales**, **SQL**, y **Herramientas Cloud** son transversales y aplican a las tres áreas mencionadas, ya que son altamente demandadas en el ámbito laboral en todas las disciplinas de la Ingeniería en Computación.
+        """)
+    
     with col4:
-        # Seleccionar las preguntas para el boxplot
-        preguntas_seleccionadas = ['Python (Software)', 'R', 'Java', 'JavaScript', 'TypeScript', 'Python (Datos)', 'Ruby Go C', 'SQL', 'PowerBI', 'Tableau']
+        # Definir las áreas y sus preguntas asociadas
+        areas = {
+            "Ingeniería de Software": ['Python (Software)', 'Java', 'JavaScript', 'TypeScript', 'Ruby Go C', 'Arquitectura de Software','QA','Control de Versiones','Despliegue de Aplicaciones','Diseño de Software','Metodologías Ágiles','SQL','Habilidades Profesionales','Cloud','React','Vue','Angular','HTML y CSS','Spring Boot','Django','Rails','Nodejs (Frameworks)' ],
+            "Ingeniería de Datos": ['Python (Datos)', 'R', 'SQL', 'PowerBI', 'Tableau','Machine Learning','Procesos ETL','IA (LLM NLP RN)','Big Data','Análisis de Datos','BD Relacionales','BD No Relacionales','Cloud','Habilidades Profesionales'],
+            "Ingeniería en Sistemas": ['Cloud','Redes','Ciberseguridad','Habilidades Profesionales','Virtualización','Windows','Linux']  # Reemplaza con las preguntas correctas
+        }
 
-        # Filtrar el DataFrame para las preguntas seleccionadas
-        filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas)]
+         # Mostrar las tarjetas una debajo de la otra
+        for area, preguntas in areas.items():
+            # Filtrar el DataFrame por las preguntas del área
+            filtered_df = melted_df[melted_df['Pregunta'].isin(preguntas)]
+            
+            # Calcular el promedio de las respuestas para el área
+            promedio_area = filtered_df['Respuesta'].mean()
 
-        # Crear el boxplot con Plotly
-        fig_boxplot = go.Figure()
+            # Mostrar tarjeta
+            st.markdown(f"""
+            <div class="card">
+                <div class="card-title">{area}</div>
+                <div class="card-text">Promedio de Competencia: {promedio_area:.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)
 
-        # Añadir un boxplot para cada tecnología
-        for pregunta in preguntas_seleccionadas:
-            fig_boxplot.add_trace(go.Box(
-                y=filtered_df[filtered_df['Pregunta'] == pregunta]['Respuesta'],
-                name=pregunta,  # Nombre de la tecnología
-                boxpoints='all',  # Mostrar todos los puntos
-                jitter=0.3,  # Separar ligeramente los puntos
-                pointpos=-1.8  # Posición de los puntos
-            ))
 
-        # Ajustar el layout
-        fig_boxplot.update_layout(
-            title="Distribución de Competencias por Tecnología",
-            xaxis_title="Tecnologías",
-            yaxis_title="Nivel de Competencia (1-5)",
+    st.markdown("<hr>", unsafe_allow_html=True)
+    ############################################################
+
+
+with tab2:
+    st.header("Visualización de Respuestas Encuesta: Sección Perfil de Egreso")
+    st.write("En esta sección se presentan las visualizaciones de las respuestas de la encuesta sobre el perfil de egreso. Las competencias están categorizadas por Fundamentos de la Computación, Ingeniería de Datos, Ingeniería de Software y Sistemas, evaluando el nivel de preparación de los egresados en cada área. Recuerda que las respuestas están en una escala de 1 a 5, donde 1 significa 'Muy poco competente' y 5 representa 'Muy competente'.")    #Separador
+    #st.markdown("<hr>", unsafe_allow_html=True)
+    # Diccionario de preguntas completas por categoría
+    areas_preguntas = {
+        'Fundamentos de la Computación': ['Fundamentos de la Computación 1', 'Fundamentos de la Computación 2'],
+        'Ingeniería de Datos': ['Ingeniería de Datos 1', 'Ingeniería de Datos 2'],
+        'Ingeniería de Software': ['Ingeniería de Software 1', 'Ingeniería de Software 2', 'Ingeniería de Software 3'],
+        'Sistemas': ['Sistemas']
+    }
+
+    # Diccionario de preguntas con el texto completo
+    preguntas_completas = {
+        'Fundamentos de la Computación 1': '¿Qué tan competente te sientes para analizar problemas computacionales, construir modelos y expresarlos en representaciones y lenguajes formales adecuados?',
+        'Fundamentos de la Computación 2': '¿Qué tan competente te sientes para analizar, diseñar y/o adaptar algoritmos y estructuras de datos que cumplan con las garantías requeridas de correctitud y eficiencia?',
+        'Ingeniería de Datos 1': '¿Qué tan competente te sientes para gestionar, extraer, obtener, generar, almacenar y recuperar información valiosa de datos diversos, complejos y masivos, utilizando modelos, lenguajes de consulta y técnicas de acceso a datos eficientes y seguras?',
+        'Ingeniería de Datos 2': '¿Qué tan competente te sientes para extraer información relevante mediante el proceso de descubrimiento de conocimiento en datos, que incluye observar, modelar, procesar y analizar los datos?',
+        'Ingeniería de Software 1': '¿Qué tan competente te sientes para concebir, diseñar y construir soluciones de software siguiendo un proceso sistemático y cuantificable, eligiendo el paradigma y las técnicas más adecuadas?',
+        'Ingeniería de Software 2': '¿Qué tan competente te sientes para desarrollar software en una amplia variedad de plataformas y lenguajes de programación?',
+        'Ingeniería de Software 3': '¿Qué tan competente te sientes para gestionar proyectos de diseño, desarrollo, implementación y evolución de soluciones de software, considerando tanto los procesos involucrados como el producto final, su calidad y la respuesta efectiva al problema que aborda?',
+        'Sistemas': '¿Qué tan competente te sientes para implementar programas eficientes que optimicen el uso de recursos computacionales, explotando las características del sistema operativo y su interacción con la arquitectura de hardware y la red de datos, previniendo, diagnosticando y resolviendo errores de programación y/o problemas de desempeño?'
+    }
+
+    def generar_grafico_barras(pregunta):
+        # Filtrar los datos para la pregunta correspondiente
+        filtered_df = melted_df[melted_df['Pregunta'] == pregunta]
+
+        # Agrupar las respuestas para la pregunta, asegurando que haya todas las opciones de 1 a 5
+        grouped_df = filtered_df.groupby('Respuesta').size().reindex([1, 2, 3, 4, 5], fill_value=0).reset_index(name='Frecuencia')
+
+        # Calcular el porcentaje para cada respuesta
+        total_respuestas = grouped_df['Frecuencia'].sum()
+        grouped_df['Porcentaje'] = (grouped_df['Frecuencia'] / total_respuestas * 100).round(2)  # Calcular el porcentaje con 2 decimales
+
+        # Crear el texto que mostrará tanto la frecuencia como el porcentaje
+        grouped_df['Texto'] = grouped_df.apply(lambda row: f"{int(row['Frecuencia'])} ({row['Porcentaje']}%)", axis=1)
+
+        # Crear gráfico de barras con Plotly
+        fig = go.Figure(go.Bar(
+            x=grouped_df['Respuesta'],
+            y=grouped_df['Frecuencia'],
+            text=grouped_df['Texto'],  # Mostrar el texto con la frecuencia y el porcentaje
+            textposition='auto'
+        ))
+
+        # Ajustar el layout del gráfico
+        fig.update_layout(
+            xaxis_title="Respuestas",
+            yaxis_title="Frecuencia",
+            xaxis=dict(
+                tickmode='array',
+                tickvals=[1, 2, 3, 4, 5],  # Asegurar que solo se muestren los valores 1-5
+            ),
             plot_bgcolor='#1c1f26',
             paper_bgcolor='#1c1f26',
             font=dict(color='#ddd'),
-            height=600,
-            width=800
+            height=600,  # Ajustar el tamaño del gráfico
+            width=600  # Ajustar el tamaño del gráfico
         )
 
-        # Mostrar el gráfico en Streamlit
-        st.plotly_chart(fig_boxplot, use_container_width=True)
+        return fig
+
+    # Mostrar las preguntas y gráficos por categoría
+    for area, preguntas in areas_preguntas.items():
+        st.markdown("<hr>", unsafe_allow_html=True)  # Separador horizontal
+        st.subheader(f"{area}")  # Título de la categoría (e.g., Fundamentos de la Computación)
+        
+        # Iterar sobre las preguntas, creando 2 columnas siempre
+        for i in range(0, len(preguntas), 2):  # Avanzar de 2 en 2
+            cols = st.columns(2)  # Siempre crear 2 columnas
+
+            # Primera columna
+            with cols[0]:
+                if i < len(preguntas):  # Verificar que hay una pregunta para esta columna
+                    texto_pregunta = preguntas_completas.get(preguntas[i], preguntas[i])
+                    st.write(f"**{texto_pregunta}**")  # Mostrar la pregunta en negrita
+                    fig = generar_grafico_barras(preguntas[i])
+                    st.plotly_chart(fig, use_container_width=True)
+
+            # Segunda columna (si hay una segunda pregunta)
+            with cols[1]:
+                if i + 1 < len(preguntas):  # Verificar que hay una segunda pregunta
+                    texto_pregunta = preguntas_completas.get(preguntas[i + 1], preguntas[i + 1])
+                    st.write(f"**{texto_pregunta}**")  # Mostrar la pregunta en negrita
+                    fig = generar_grafico_barras(preguntas[i + 1])
+                    st.plotly_chart(fig, use_container_width=True)
+
+
+
+
 
     st.markdown("<hr>", unsafe_allow_html=True)
 
-    st.header("Visualización de Respuestas Encuesta: Sección Perfil de Egreso")
-    st.write("En esta sección se presentan las visualizaciones de las respuestas de la encuesta sobre el perfil de egreso. Las competencias están categorizadas por Fundamentos de la Computación, Ingeniería de Datos, Ingeniería de Software y Sistemas, evaluando el nivel de preparación de los egresados en cada área. Recuerda que las respuestas están en una escala de 1 a 5, donde 1 significa 'Muy poco competente' y 5 representa 'Muy competente'.")    #Separador
-    st.markdown("<hr>", unsafe_allow_html=True)
-
-
-
-
-
-    st.markdown("<hr>", unsafe_allow_html=True)
-
+    ###############################################################
     st.header("Sugerencias para Mejorar la Formación Académica")
     st.write("A continuación se muestran algunas de las sugerencias que fueron mencionadas por los encuestados para mejorar la formación académica en la carrera de Ingeniería en Computación.")
     # Lista de sugerencias con títulos y texto
@@ -535,22 +618,3 @@ with tab1:
                     <div class="card-text">{sugerencia['text']}</div>
                 </div>
                 """, unsafe_allow_html=True)
-
-
-
-with tab2:
-    st.header("Hoja 2")
-    st.write("Aquí puedes poner contenido de la Hoja 2")
- 
-    # Dividir en columnas
-    col1, col2, col3, col4, col5 = st.columns(5)
-    with col1:
-        st.metric(label="Documents", value="10.5K", delta="125")
-    with col2:
-        st.metric(label="Annotations", value="510", delta="-2")
-    with col3:
-        st.metric(label="Accuracy", value="87.9%", delta="0.1%")
-    with col4:
-        st.metric(label="Training Time", value="1.5 hours", delta="10 mins")
-    with col5:
-        st.metric(label="Processing Time", value="3 seconds", delta="-0.1 seconds")

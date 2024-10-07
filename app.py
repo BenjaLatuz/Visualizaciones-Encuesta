@@ -79,6 +79,29 @@ html, body, [class*="ViewContainer"] {
     color: #ccc;
     line-height: 1.6;
 }
+            
+/* Ajustes para pantallas pequeñas */
+@media (max-width: 768px) {
+    .card {
+        flex: 1 0 45%; /* Ocupa 45% de la pantalla para 2 columnas en móviles */
+        min-width: 150px; /* Tamaño mínimo más pequeño en móviles */
+    }
+    .metric-value {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .card {
+        flex: 1 0 100%; /* Ocupa el 100% del ancho de la pantalla en móviles */
+        margin: 10px 0;
+    }
+    .metric-value {
+        font-size: 18px;
+    }
+}
+
+
 </style>
 """, unsafe_allow_html=True)
 

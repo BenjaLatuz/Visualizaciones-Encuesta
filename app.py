@@ -329,7 +329,7 @@ with tab1:
         )
 
         # Mostrar el gráfico en Streamlit
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         st.header("Competencia Promedio en distintos aspectos de la Ingeniería en Computación")
@@ -404,7 +404,7 @@ with tab1:
         )
 
         # Mostrar el gráfico de radar en Streamlit
-        st.plotly_chart(fig_radar)
+        st.plotly_chart(fig_radar, use_container_width=True)
 
 
 
@@ -481,7 +481,7 @@ with tab1:
         )
 
         # Mostrar el gráfico en Streamlit
-        st.plotly_chart(fig)
+        st.plotly_chart(fig, use_container_width=True)
 
     with col2:
         st.header("Promedio de Competencia por Área")
@@ -598,7 +598,7 @@ with tab2:
                     texto_pregunta = preguntas_completas.get(preguntas[i], preguntas[i])
                     st.write(f"**{texto_pregunta}**")  # Mostrar la pregunta en negrita
                     fig = generar_grafico_barras(preguntas[i])
-                    st.plotly_chart(fig)
+                    st.plotly_chart(fig, use_container_width=True)
 
             # Segunda columna (si hay una segunda pregunta)
             with cols[1]:
@@ -606,7 +606,7 @@ with tab2:
                     texto_pregunta = preguntas_completas.get(preguntas[i + 1], preguntas[i + 1])
                     st.write(f"**{texto_pregunta}**")  # Mostrar la pregunta en negrita
                     fig = generar_grafico_barras(preguntas[i + 1])
-                    st.plotly_chart(fig)
+                    st.plotly_chart(fig, use_container_width=True)
 
 
 

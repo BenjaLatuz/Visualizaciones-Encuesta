@@ -329,7 +329,7 @@ with tab1:
         )
 
         # Mostrar el gráfico en Streamlit
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, responsive=True)
 
     with col2:
         st.header("Competencia Promedio en distintos aspectos de la Ingeniería en Computación")

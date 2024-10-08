@@ -450,7 +450,7 @@ with tab1:
             colorscale='balance',  # Escala de colores
             showscale=True,  # Mostrar la barra de colores
             hoverongaps=False,  # No mostrar espacios en blanco
-            zmin=2,  # Ajuste de mínimo para el rango de colores
+            zmin=1.3,  # Ajuste de mínimo para el rango de colores
             zmax=5   # Ajuste de máximo para el rango de colores
         ))
 
@@ -461,7 +461,7 @@ with tab1:
                 y=[y_labels[i]],  # Puntos en el eje Y para cada etiqueta
                 mode='text',
                 text=[f'{z_data[i][0]:.2f}'],  # Mostrar el valor formateado
-                textfont=dict(color='black' if z_data[i][0] > 3 and z_data[i][0] < 4  else 'white'),  # Color del texto (dependiendo del fondo)
+                textfont=dict(color='black' if z_data[i][0] > 2.5 and z_data[i][0] < 4  else 'white'),  # Color del texto (dependiendo del fondo)
                 textposition="middle center",
                 showlegend=False  # Deshabilitar leyenda para este scatter
             ))
@@ -496,7 +496,7 @@ with tab1:
         areas = {
             "Ingeniería de Software": ['Python (Software)', 'Java', 'JavaScript', 'TypeScript', 'Ruby Go C', 'Arquitectura de Software','QA','Control de Versiones','Despliegue de Aplicaciones','Diseño de Software','Metodologías Ágiles','SQL','Habilidades Profesionales','Cloud','React','Vue','Angular','HTML y CSS','Spring Boot','Django','Rails','Nodejs (Frameworks)' ],
             "Ingeniería de Datos": ['Python (Datos)', 'R', 'SQL', 'PowerBI', 'Tableau','Machine Learning','Procesos ETL','IA (LLM NLP RN)','Big Data','Análisis de Datos','BD Relacionales','BD No Relacionales','Cloud','Habilidades Profesionales'],
-            "Ingeniería en Sistemas": ['Cloud','Redes','Ciberseguridad','Habilidades Profesionales','Virtualización','Windows','Linux']  # Reemplaza con las preguntas correctas
+            "Ingeniería en Sistemas": ['Cloud','Redes','Ciberseguridad','Habilidades Profesionales','Virtualización','Windows','Linux'] 
         }
 
          # Mostrar las tarjetas una debajo de la otra

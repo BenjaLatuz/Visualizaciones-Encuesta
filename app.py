@@ -19,6 +19,8 @@ html, body, [class*="ViewContainer"] {
     color: #ddd;
     background-color: #1c1f26;
 }
+
+/* Estilo de las métricas */
 .metric {
     margin: 10px;
     padding: 15px;
@@ -30,7 +32,7 @@ html, body, [class*="ViewContainer"] {
 }
 .metric-name {
     font-size: 16px;
-    color: #4caf50;
+    color: #4caf50 !important;  /* Color verde para el nombre de la métrica */
     font-weight: bold;
 }
 .metric-value {
@@ -43,6 +45,8 @@ html, body, [class*="ViewContainer"] {
     font-size: 16px;
     color: #ccc;
 }
+
+/* Estilo de las cajas */
 .box {
     border: 1px solid #555;
     padding: 10px;
@@ -51,7 +55,8 @@ html, body, [class*="ViewContainer"] {
     box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
     background-color: #333;
 }
-            
+
+/* Estilo de las tarjetas */
 .card-container {
     display: flex;
     justify-content: center;
@@ -70,7 +75,7 @@ html, body, [class*="ViewContainer"] {
 }
 .card-title {
     font-size: 20px;
-    color: #4caf50;
+    color: #4caf50 !important;  /* Mantener el color verde para los títulos de las tarjetas */
     font-weight: bold;
     margin-bottom: 10px;
 }
@@ -79,7 +84,7 @@ html, body, [class*="ViewContainer"] {
     color: #ccc;
     line-height: 1.6;
 }
-            
+
 /* Ajustes para pantallas pequeñas */
 @media (max-width: 768px) {
     .card {
@@ -101,15 +106,15 @@ html, body, [class*="ViewContainer"] {
     }
 }
 
+/* Forzar color blanco para títulos (h1-h6) */
 h1, h2, h3, h4, h5, h6 {
     color: #ffffff !important;  /* Color blanco para títulos */
 }
 
+/* Forzar color blanco para etiquetas de radio buttons */
 input[type="radio"] + label {
     color: #ffffff !important;  /* Color blanco para las etiquetas de los radio buttons */
 }
-</style
-
 </style>
 """, unsafe_allow_html=True)
 

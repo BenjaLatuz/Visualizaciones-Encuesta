@@ -1,6 +1,6 @@
 import streamlit as st
 import pandas as pd
-import matplotlib.pyplot as plt
+#import matplotlib.pyplot as plt
 import numpy as np
 import plotly.graph_objects as go
 
@@ -14,109 +14,109 @@ st.set_page_config(
 
 # CSS para ajustar el color de fondo, el estilo de las tarjetas y el color de texto
 st.markdown("""
-<style>
-html, body, [class*="ViewContainer"] {
-    color: #ddd;
-    background-color: #1c1f26;
-}
+    <style>
+        /* Aplicar modo oscuro siempre */
+        html, body, [class*="ViewContainer"] {
+            background-color: #1c1f26 !important;  /* Fondo oscuro */
+            color: #ddd !important;  /* Texto claro */
+        }
 
-/* Estilo de las métricas */
-.metric {
-    margin: 10px;
-    padding: 15px;
-    text-align: center;
-    color: #ddd;
-    background-color: #2a2d35;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px grey;
-}
-.metric-name {
-    font-size: 16px;
-    color: #4caf50 !important;  /* Color verde para el nombre de la métrica */
-    font-weight: bold;
-}
-.metric-value {
-    font-size: 26px;
-    color: #fff;
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-.metric-freq {
-    font-size: 16px;
-    color: #ccc;
-}
+        /* Forzar el color de los textos en los encabezados (títulos) */
+        h1, h2, h3, h4, h5, h6 {
+            color: #ffffff !important;  /* Texto blanco para todos los encabezados */
+        }
 
-/* Estilo de las cajas */
-.box {
-    border: 1px solid #555;
-    padding: 10px;
-    margin: 10px 0;
-    border-radius: 10px;
-    box-shadow: 2px 2px 12px rgba(0, 0, 0, 0.1);
-    background-color: #333;
-}
+        /* Forzar el color de los textos en selectbox */
+        .stSelectbox label {
+            color: #ddd !important;  /* Texto claro para el label del selectbox */
+        }
 
-/* Estilo de las tarjetas */
-.card-container {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-}
-.card {
-    flex: 1 0 30%;
-    margin: 10px;
-    padding: 15px;
-    text-align: center;
-    color: #ddd;
-    background-color: #2a2d35;
-    border-radius: 10px;
-    box-shadow: 2px 2px 10px grey;
-    min-width: 250px;
-}
-.card-title {
-    font-size: 20px;
-    color: #4caf50 !important;  /* Mantener el color verde para los títulos de las tarjetas */
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-.card-text {
-    font-size: 16px;
-    color: #ccc;
-    line-height: 1.6;
-}
+        /* Forzar el color de los textos en los botones */
+        .stButton button {
+            background-color: #333 !important;  /* Fondo oscuro para los botones */
+            color: #ddd !important;  /* Texto claro en los botones */
+            border: 1px solid #555 !important;  /* Borde oscuro para los botones */
+        }
 
-/* Ajustes para pantallas pequeñas */
-@media (max-width: 768px) {
-    .card {
-        flex: 1 0 45%; /* Ocupa 45% de la pantalla para 2 columnas en móviles */
-        min-width: 150px; /* Tamaño mínimo más pequeño en móviles */
-    }
-    .metric-value {
-        font-size: 20px;
-    }
-}
+        /* Estilo de las métricas */
+        .metric {
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            color: #ddd !important;  /* Texto claro */
+            background-color: #2a2d35 !important;  /* Fondo oscuro */
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px grey;
+        }
+        .metric-name {
+            font-size: 16px;
+            color: #4caf50 !important;  /* Texto verde */
+            font-weight: bold;
+        }
+        .metric-value {
+            font-size: 26px;
+            color: #fff !important;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        .metric-freq {
+            font-size: 16px;
+            color: #ccc !important;
+        }
 
-@media (max-width: 480px) {
-    .card {
-        flex: 1 0 100%; /* Ocupa el 100% del ancho de la pantalla en móviles */
-        margin: 10px 0;
-    }
-    .metric-value {
-        font-size: 18px;
-    }
-}
+        /* Estilo de las tarjetas */
+        .card-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .card {
+            flex: 1 0 30%;
+            margin: 10px;
+            padding: 15px;
+            text-align: center;
+            color: #ddd !important;  /* Texto claro */
+            background-color: #2a2d35 !important;  /* Fondo oscuro */
+            border-radius: 10px;
+            box-shadow: 2px 2px 10px grey;
+            min-width: 250px;
+        }
+        .card-title {
+            font-size: 20px;
+            color: #4caf50 !important;  /* Texto verde para títulos */
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .card-text {
+            font-size: 16px;
+            color: #ccc !important;  /* Texto claro */
+            line-height: 1.6;
+        }
+        /* Asegurar que las etiquetas de los radio buttons sean blancas */
+        input[type="radio"] + div {
+            color: #ffffff !important;  /* Forzar el color blanco en el texto de las opciones */
+        }
 
-/* Forzar color blanco para títulos (h1-h6) */
-h1, h2, h3, h4, h5, h6 {
-    color: #ffffff !important;  /* Color blanco para títulos */
-}
+        .stRadio div[role="radiogroup"] > label {
+            color: #ffffff !important;  /* Forzar el color blanco en los labels */
+        }
 
-/* Forzar color blanco para etiquetas de radio buttons */
-input[type="radio"] + label {
-    color: #ffffff !important;  /* Color blanco para las etiquetas de los radio buttons */
-}
-</style>
+        /* Asegurar que las opciones de los radio buttons sean blancas */
+        .stRadio label {
+            color: #ffffff !important;  /* Forzar el color blanco en el texto de las opciones */
+        }       
+        
+        button[disabled] {
+            background-color: #333 !important;  /* Gris oscuro para fondo deshabilitado */
+            color: #aaa !important;  /* Texto en gris claro */
+            border: 2px solid #444 !important;  /* Bordes en gris más oscuro */
+            cursor: not-allowed !important;  /* Mostrar el ícono de no permitido */
+        }
+
+    
+    </style>
 """, unsafe_allow_html=True)
+
 
 # Define el color de fondo y el color del texto para que coincida con el estilo de tu página
 background_color = '#1c1f26'  # Color de fondo de la página
@@ -124,13 +124,13 @@ text_color = '#ddd'  # Color del texto en la página
 edge_color = '#555'  # Color para los bordes del gráfico, que podría coincidir con tu estilo
 
 # Configuración de Matplotlib para que coincida con los estilos de Streamlit
-plt.rcParams['figure.facecolor'] = background_color
-plt.rcParams['axes.facecolor'] = background_color
-plt.rcParams['text.color'] = text_color
-plt.rcParams['axes.labelcolor'] = text_color
-plt.rcParams['xtick.color'] = text_color
-plt.rcParams['ytick.color'] = text_color
-plt.rcParams['axes.edgecolor'] = edge_color
+#plt.rcParams['figure.facecolor'] = background_color
+#plt.rcParams['axes.facecolor'] = background_color
+#plt.rcParams['text.color'] = text_color
+#plt.rcParams['axes.labelcolor'] = text_color
+#plt.rcParams['xtick.color'] = text_color
+#plt.rcParams['ytick.color'] = text_color
+#plt.rcParams['axes.edgecolor'] = edge_color
 
 
 # Cargar el archivo CSV
@@ -159,7 +159,6 @@ with tab1:
     
     # Selector de categoría
     # Se buscará que si hay muchas tecnologías asociadas, haya un scroll horizontal
-    # y proximamente, se ligará a un csv y así se actualizará automáticamente (no hardcodeado, si es que alcanza el tiempo)
     # Datos de categorías de tecnologías
     category_options = {
         "Lenguajes de Programación": [
@@ -292,7 +291,7 @@ with tab1:
         st.header("Frecuencia de Competencia en Tecnologías Backend y Frontend")
         # Usar st.radio para seleccionar entre Frontend y Backend
         selected_tech_category = st.radio(
-            "Seleccione una categoría", 
+            "Seleccione una categoría:", 
             options=["Frontend", "Backend"], 
             index=0, 
             horizontal=True
@@ -327,23 +326,37 @@ with tab1:
 
         # Ajustar el layout del gráfico
         fig.update_layout(
-            title=dict(text=f'Desarrollo de {selected_tech_category}', font=dict(size=18)),
-            xaxis_title=dict(text='Respuestas', font=dict(size=18)),
-            yaxis_title=dict(text='Frecuencia', font=dict(size=18)),
-            legend=dict(font=dict(size=14)),  # Aumenta el tamaño de la leyenda
+            title=dict(text=f'Desarrollo de {selected_tech_category}', font=dict(size=18, color='#ffffff')),  # Texto blanco para el título
+            xaxis_title=dict(text='Respuestas', font=dict(size=18, color='#ffffff')),  # Texto blanco para el título del eje X
+            yaxis_title=dict(text='Frecuencia', font=dict(size=18, color='#ffffff')),  # Texto blanco para el título del eje Y
+            legend=dict(font=dict(size=14, color='#ffffff')),  # Texto blanco para las leyendas
             barmode='group',  # Estilo multibarra
-            yaxis=dict(tickmode='linear', tickfont=dict(size=18)),  # Solo enteros en el eje Y, ajustar tamaño de los ticks
-            xaxis=dict(tickfont=dict(size=18)),  # Ajustar tamaño de las etiquetas del eje X
+            yaxis=dict(
+                tickmode='linear', 
+                tickfont=dict(size=18, color='#ffffff'),  # Texto blanco para los ticks del eje Y
+                gridcolor='#555',  # Color gris para las líneas del grid en el eje Y
+                zeroline=True,  # Mantener la línea cero
+                zerolinecolor='#555',  # Asegurar que la línea cero sea gris
+                linecolor='#555',  # Color gris para el borde del eje Y
+                showline=False,  # No mostrar la línea adicional en la parte inferior del eje Y
+            ),
+            xaxis=dict(
+                tickfont=dict(size=18, color='#ffffff'),  # Texto blanco para los ticks del eje X
+                gridcolor='#555',  # Color gris para las líneas del grid en el eje X
+                zeroline=True,  # Mantener la línea cero
+                zerolinecolor='#555',  # Asegurar que la línea cero sea gris
+                linecolor='#555',  # Color gris para el borde del eje X
+                showline=False,  # No mostrar la línea adicional en el borde del eje X
+            ),
             plot_bgcolor='#1c1f26',  # Fondo oscuro como tu estilo de Streamlit
             paper_bgcolor='#1c1f26',
-            font=dict(color='#ddd'),
+            font=dict(color='#ffffff'),  # Asegurar que todo el texto sea blanco
             height=600,
             width=600  # Ajustar tamaño para asegurar que se vea bien en pantallas grandes y pequeñas
         )
-
-        # Mostrar el gráfico en Streamlit
+        
         st.plotly_chart(fig, use_container_width=True)
-
+        
     with col2:
         st.header("Competencia Promedio en distintos aspectos de la Ingeniería en Computación")
         
@@ -398,23 +411,23 @@ with tab1:
                     ticktext=['0', '1', '2', '3', '4', '5'],  # Mostrar los valores de 0 a 5
                     showline=False,  # Ocultar líneas radiales
                     gridcolor='#555',  # Color de las líneas del grid
-                    tickfont=dict(size=14),  # Ajustar el tamaño de letra del eje radial
+                    tickfont=dict(size=14, color='#ffffff'),  # Texto blanco para el eje radial
                 ),
                 angularaxis=dict(
                     showline=False,
                     gridcolor='#555',  # Color de las líneas del grid angular
-                    tickfont=dict(size=14)  # Ajustar el tamaño de letra en los ejes angulares (categorías)
+                    tickfont=dict(size=14, color='#ffffff')  # Texto blanco para el eje angular (categorías)
                 ),
                 bgcolor='#1c1f26',  # Fondo del radar para que coincida con el estilo oscuro
             ),
-            title=dict(text=f"Promedio de Respuestas por {categoria_seleccionada}", font=dict(size=18)),  # Título ajustado
-            plot_bgcolor='#1c1f26',
-            paper_bgcolor='#1c1f26',
-            font=dict(color='#ddd'),
+            title=dict(text=f"Promedio de Respuestas por {categoria_seleccionada}", font=dict(size=18, color='#ffffff')),  # Texto blanco para el título
+            plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
+            paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
+            font=dict(color='#ffffff'),  # Texto blanco en general
             margin=dict(l=115, r=115, t=115, b=115),  # Aumentar márgenes laterales
             height=600,
             width=800  # Ajustar el tamaño como desees
-        )
+)
         # Mostrar el gráfico de radar en Streamlit
         st.plotly_chart(fig_radar, use_container_width=True)
 
@@ -480,15 +493,15 @@ with tab1:
 
         # Ajustar el layout del gráfico
         fig.update_layout(
-            xaxis_title="Competencia",  # Etiqueta para el eje X
-            yaxis_title="Lenguajes y Herramientas",  # Etiqueta para el eje Y
-            xaxis=dict(tickfont=dict(size=18)),
-            yaxis=dict(tickfont=dict(size=18)),
+            xaxis_title=dict(text="Competencia", font=dict(size=18, color='#ffffff')),  # Texto blanco para la etiqueta del eje X
+            yaxis_title=dict(text="Lenguajes y Herramientas", font=dict(size=18, color='#ffffff')),  # Texto blanco para la etiqueta del eje Y
+            xaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje X
+            yaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje Y
             height=600,  # Ajustar el tamaño del gráfico
             width=800,
-            plot_bgcolor='#1c1f26',
-            paper_bgcolor='#1c1f26',
-            font=dict(color='#ddd'),  # Asegurarse de que el texto sea visible
+            plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
+            paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
+            font=dict(color='#ffffff'),  # Asegurarse de que todo el texto sea blanco
             showlegend=False  # Deshabilitar todas las leyendas
         )
 
@@ -578,19 +591,32 @@ with tab2:
             textposition='auto'
         ))
 
-        # Ajustar el layout del gráfico
+       # Ajustar el layout del gráfico
         fig.update_layout(
-            xaxis_title="Respuestas",
-            yaxis_title="Frecuencia",
+            xaxis_title=dict(text="Respuestas", font=dict(color='#ffffff')),  # Nombre del eje X
+            yaxis_title=dict(text="Frecuencia", font=dict(color='#ffffff')),  # Nombre del eje Y
             xaxis=dict(
                 tickmode='array',
-                tickvals=[1, 2, 3, 4, 5],  # Asegurar que solo se muestren los valores 1-5
+                tickvals=[1, 2, 3, 4, 5],  # Mostrar solo los valores 1-5 en el eje X
+                tickfont=dict(color='#ffffff'),  # Color blanco para los números del eje X
+                gridcolor='#555',  # Color gris para las líneas del grid en el eje X
+                zeroline=True,  # Mantener la línea cero
+                zerolinecolor='#555',  # Color gris para la línea cero
+                linecolor='#555',  # Color gris para el borde del eje X
+                showline=False  # No mostrar la línea adicional en el borde del eje X
             ),
-            plot_bgcolor='#1c1f26',
-            paper_bgcolor='#1c1f26',
-            font=dict(color='#ddd'),
-            height=600,  # Ajustar el tamaño del gráfico
-            width=600  # Ajustar el tamaño del gráfico
+            yaxis=dict(
+                tickfont=dict(color='#ffffff'),  # Color blanco para los números del eje Y
+                gridcolor='#555',  # Color gris para las líneas del grid en el eje Y
+                zeroline=True,  # Mantener la línea cero
+                zerolinecolor='#555',  # Color gris para la línea cero
+                linecolor='#555',  # Color gris para el borde del eje Y
+                showline=False  # No mostrar la línea adicional en el borde del eje Y
+            ),
+            plot_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
+            paper_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
+            font=dict(color='#ffffff'),  # Texto general en blanco
+            height=600,  # Tamaño del gráfico
         )
 
         return fig

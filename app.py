@@ -101,6 +101,14 @@ html, body, [class*="ViewContainer"] {
     }
 }
 
+h1, h2, h3, h4, h5, h6 {
+    color: #ffffff !important;  /* Color blanco para títulos */
+}
+
+input[type="radio"] + label {
+    color: #ffffff !important;  /* Color blanco para las etiquetas de los radio buttons */
+}
+</style
 
 </style>
 """, unsafe_allow_html=True)
@@ -402,7 +410,6 @@ with tab1:
             height=600,
             width=800  # Ajustar el tamaño como desees
         )
-
         # Mostrar el gráfico de radar en Streamlit
         st.plotly_chart(fig_radar, use_container_width=True)
 

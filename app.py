@@ -273,7 +273,7 @@ with tab1:
     col1, col2 = st.columns(2)
 
     ########################## Distribución de los gráficos ##########################
-    col3, col4 = st.columns(2)  # Crear dos columnas para alinear los gráficos
+    #col3, col4 = st.columns(2)  # Crear dos columnas para alinear los gráficos
     
     with col1:
         st.header("Frecuencia de Competencia en Tecnologías Backend y Frontend")
@@ -286,7 +286,7 @@ with tab1:
         )
 
     # Gráfico de barras (Frontend/Backend)
-    with col3:
+    #with col3:
         ########################## FRONTEND y BACKEND ##########################
         category_switch = {
             "Frontend": ['React', 'Vue', 'Angular', 'HTML y CSS'],
@@ -348,7 +348,7 @@ with tab1:
             horizontal=True
         )
 
-    with col4:
+    #with col4:
         # Obtener las preguntas basadas en la categoría seleccionada
         preguntas_seleccionadas = categorias_disponibles[categoria_seleccionada]
 
@@ -414,13 +414,13 @@ with tab1:
     ########################## Títulos para cada columna ##########################
     col1, col2 = st.columns(2)
     ########################## Distribución de los gráficos ##########################
-    col3, col4 = st.columns(2)  # Crear dos columnas para alinear los gráficos
+    #col3, col4 = st.columns(2)  # Crear dos columnas para alinear los gráficos
 
     with col1:
         st.header("Competencia Promedio en Lenguajes de Programación (+SQL) y Herramientas de Visualización de Datos")
 
     ########################## Lenguajes de Programación + SQL ##########################    
-    with col3:
+    #with col3:
         # Seleccionar las preguntas para el mapa de calor
         preguntas_seleccionadas_1 = ['Python (Software)', 'R', 'Java', 'JavaScript', 'TypeScript', 'Python (Datos)', 'Ruby Go C', 'SQL', 'PowerBI', 'Tableau']
         filtered_df_1 = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas_1)]
@@ -491,7 +491,7 @@ with tab1:
         Este análisis incluye todas las preguntas relacionadas con ofertas laborales de la encuesta. Además, se ha considerado que las competencias en **Habilidades Profesionales**, **SQL**, y **Herramientas Cloud** son transversales y aplican a las tres áreas mencionadas, ya que son altamente demandadas en el ámbito laboral en todas las disciplinas de la Ingeniería en Computación.
         """)
     
-    with col4:
+    #with col4:
         # Definir las áreas y sus preguntas asociadas
         areas = {
             "Ingeniería de Software": ['Python (Software)', 'Java', 'JavaScript', 'TypeScript', 'Ruby Go C', 'Arquitectura de Software','QA','Control de Versiones','Despliegue de Aplicaciones','Diseño de Software','Metodologías Ágiles','SQL','Habilidades Profesionales','Cloud','React','Vue','Angular','HTML y CSS','Spring Boot','Django','Rails','Nodejs (Frameworks)' ],

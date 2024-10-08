@@ -25,6 +25,12 @@ st.markdown("""
         h1, h2, h3, h4, h5, h6 {
             color: #ffffff !important;  /* Texto blanco para todos los encabezados */
         }
+        
+        hr {
+            border: none;
+            border-top: 2px solid #555555;  /* Cambia el color a gris */
+            margin: 20px 0;
+        }
 
         /* Forzar el color de los textos en selectbox */
         .stSelectbox label {
@@ -318,11 +324,20 @@ with tab1:
 
         # Añadir cada tecnología como un conjunto de barras
         for tecnologia in grouped_df.columns:
+            total_frecuencia = grouped_df[tecnologia].sum()  # Calcular el total para obtener el porcentaje
             fig.add_trace(go.Bar(
                 x=grouped_df.index,  # Eje X serán las respuestas
                 y=grouped_df[tecnologia],  # Eje Y serán las frecuencias
-                name=tecnologia
+                name=tecnologia,
+                hovertemplate=(
+                    '<b>Tecnología:</b> ' + tecnologia + '<br>' +
+                    '<b>Respuesta:</b> %{x}<br>' +  # Mostrar la respuesta (valor del eje X)
+                    '<b>Frecuencia:</b> %{y}<br>' +
+                    '<b>Porcentaje:</b> %{customdata:.2f}%<extra></extra>'  # Mostrar el porcentaje
+                ),
+                customdata=(grouped_df[tecnologia] / total_frecuencia) * 100  # Pasar el porcentaje calculado como customdata
             ))
+        
 
         # Ajustar el layout del gráfico
         fig.update_layout(
@@ -373,8 +388,6 @@ with tab1:
             list(categorias_disponibles.keys()), 
             horizontal=True
         )
-
-    #with col4:
         # Obtener las preguntas basadas en la categoría seleccionada
         preguntas_seleccionadas = categorias_disponibles[categoria_seleccionada]
 
@@ -398,7 +411,8 @@ with tab1:
             fill='toself',
             fillcolor='rgba(31, 119, 180, 0.3)',  # Color azul con transparencia
             line=dict(color='rgba(31, 119, 180, 1)'),  # Color de la línea azul
-            name='Promedio'
+            name='Promedio',
+            hovertemplate='<b>Aspecto:</b> %{theta}<br><b>Promedio:</b> %{r:.2f}<extra></extra>'  # Personalizar el tooltip
         ))
 
         # Ajustar el layout del gráfico de radar
@@ -427,7 +441,7 @@ with tab1:
             margin=dict(l=115, r=115, t=115, b=115),  # Aumentar márgenes laterales
             height=600,
             width=800  # Ajustar el tamaño como desees
-)
+        )
         # Mostrar el gráfico de radar en Streamlit
         st.plotly_chart(fig_radar, use_container_width=True)
 
@@ -476,7 +490,11 @@ with tab1:
             showscale=True,  # Mostrar la barra de colores
             hoverongaps=False,  # No mostrar espacios en blanco
             zmin=1.3,  # Ajuste de mínimo para el rango de colores
-            zmax=5   # Ajuste de máximo para el rango de colores
+            zmax=5,   # Ajuste de máximo para el rango de colores
+            hovertemplate=(
+                '<b>Herramienta:</b> %{y}<br>' +  # Mostrar la herramienta
+                '<b>Promedio:</b> %{z:.2f}<extra></extra>'  # Mostrar el promedio formateado a 2 decimales
+            )
         ))
 
         # Añadir anotaciones de texto dentro de las celdas del heatmap
@@ -545,6 +563,9 @@ with tab1:
     ############################################################
 
 
+
+
+
 with tab2:
     st.header("Visualización de Respuestas Encuesta: Sección Perfil de Egreso")
     st.write("En esta sección se presentan las visualizaciones de las respuestas de la encuesta sobre el perfil de egreso. Las competencias están categorizadas por Fundamentos de la Computación, Ingeniería de Datos, Ingeniería de Software y Sistemas, evaluando el nivel de preparación de los egresados en cada área. Recuerda que las respuestas están en una escala de 1 a 5, donde 1 significa 'Muy poco competente' y 5 representa 'Muy competente'.")    #Separador
@@ -588,10 +609,12 @@ with tab2:
             x=grouped_df['Respuesta'],
             y=grouped_df['Frecuencia'],
             text=grouped_df['Texto'],  # Mostrar el texto con la frecuencia y el porcentaje
-            textposition='auto'
+            textposition='auto',
+            marker=dict(color='rgba(31, 119, 180, 1)'),  # Color azul para las barras
+            textfont=dict(color='white')  # Texto blanco dentro de las barras
         ))
 
-       # Ajustar el layout del gráfico
+        # Ajustar el layout del gráfico
         fig.update_layout(
             xaxis_title=dict(text="Respuestas", font=dict(color='#ffffff')),  # Nombre del eje X
             yaxis_title=dict(text="Frecuencia", font=dict(color='#ffffff')),  # Nombre del eje Y
@@ -616,7 +639,7 @@ with tab2:
             plot_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
             paper_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
             font=dict(color='#ffffff'),  # Texto general en blanco
-            height=600,  # Tamaño del gráfico
+            height=600  # Tamaño del gráfico
         )
 
         return fig

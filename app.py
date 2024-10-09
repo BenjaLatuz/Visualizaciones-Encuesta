@@ -118,6 +118,31 @@ st.markdown("""
             border: 2px solid #444 !important;  /* Bordes en gris más oscuro */
             cursor: not-allowed !important;  /* Mostrar el ícono de no permitido */
         }
+          /* Estilos para los tabs */
+        div.stTabs [data-baseweb="tab"] {
+            background-color: #2a2d35;  /* Fondo oscuro para los tabs */
+            color: #ddd !important;  /* Texto claro para los tabs */
+            border-radius: 10px;  /* Bordes redondeados para los tabs */
+            margin-right: 8px;  /* Espacio entre los tabs */
+            padding: 8px 20px;  /* Relleno para agrandar los tabs */
+            transition: all 0.3s ease-in-out;  /* Transición suave */
+        }
+
+        /* Estilo para el tab seleccionado */
+        div.stTabs [data-baseweb="tab"][aria-selected="true"] {
+            background-color: #4caf50 !important;  /* Fondo verde para el tab seleccionado */
+            color: #ffffff !important;  /* Texto blanco para el tab seleccionado */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);  /* Sombra para el tab seleccionado */
+            transform: scale(1.05);  /* Aumentar un poco el tamaño */
+        }
+
+        /* Estilo para el tab no seleccionado al pasar el mouse */
+        div.stTabs [data-baseweb="tab"][aria-selected="false"]:hover {
+            background-color: #3e424b;  /* Fondo más claro cuando se pasa el mouse */
+            color: #ffffff !important;  /* Texto blanco cuando se pasa el mouse */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);  /* Sombra ligera cuando se pasa el mouse */
+            transform: scale(1.03);  /* Aumentar ligeramente el tamaño cuando se pasa el mouse */
+        }
 
     
     </style>
@@ -152,9 +177,11 @@ columns_to_melt = [col for col in df.columns if col not in columns_to_exclude]
 melted_df = pd.melt(df.drop(columns=columns_to_exclude), var_name='Pregunta', value_name='Respuesta')
 
 st.title("Dashboard de Visualizaciones")
-st.write("A continuación se muestran las visualizaciones asociadas a las respuestas de la encuesta, y con las tecnologías más demandadas en el mercado laboral.")
+st.write("""
+    A continuación se muestran los resultados obtenidos de la encuesta realizada a estudiantes sobre el **Perfil de Egreso** y las **Ofertas Laborales** en el campo de la Ingeniería en Computación. 
 
-
+    Utiliza los botones a continuación para navegar entre las secciones y visualizar los resultados correspondientes a cada área.
+""")
 # Crear las pestañas
 tab1, tab2 = st.tabs(["Ofertas Laborales", "Perfil de Egreso"])
 
@@ -680,29 +707,47 @@ with tab2:
     st.markdown("<hr>", unsafe_allow_html=True)
 
     ###############################################################
-    st.header("Sugerencias para Mejorar la Formación Académica")
-    st.write("A continuación se muestran algunas de las sugerencias que fueron mencionadas por los encuestados para mejorar la formación académica en la carrera de Ingeniería en Computación.")
+
     # Lista de sugerencias con títulos y texto
     sugerencias = [
-    {"title": "Enfoque en Tecnologías y Lenguajes del Mundo Laboral", "text": "Talleres prácticos con lenguajes de programación y tecnologías relevantes en el mundo laboral, actualizando cursos con nuevas tecnologías y evitando centrarse solo en Python o C/C++."},
-    {"title": "Malla Curricular con Especializaciones","text": "Materializar las distintas líneas de especialización en la malla curricular, garantizando que los estudiantes adquieran conocimientos especializados en alguna área clave de la computación, sin dejar a la suerte del estudiante la elección de ramos optativos para completar la malla."},
-    {"title": "Conexión Teoría-Práctica a través de Proyectos Reales", "text": "Desafiar a los estudiantes a aplicar conocimientos en más proyectos reales durante la carrera, conectando la teoría con la práctica y permitiendo que desarrollen soluciones que los preparen directamente para su futuro profesional."}
-    ]   
-    # Mostrar sugerencias en tarjetas con títulos
-    st.markdown('<div class="card-container">', unsafe_allow_html=True)
-    # Crear columnas para las tarjetas
-    num_cols = 3  # Número de columnas por fila
+        {"title": "Enfoque en Tecnologías y Lenguajes del Mundo Laboral", "text": "Talleres prácticos con lenguajes de programación y tecnologías relevantes en el mundo laboral, actualizando cursos con nuevas tecnologías y evitando centrarse solo en Python o C/C++."},
+        {"title": "Malla Curricular con Especializaciones", "text": "Materializar las distintas líneas de especialización en la malla curricular, garantizando que los estudiantes adquieran conocimientos especializados en alguna área clave de la computación, sin dejar a la suerte del estudiante la elección de ramos optativos para completar la malla."},
+        {"title": "Conexión Teoría-Práctica a través de Proyectos Reales", "text": "Desafiar a los estudiantes a aplicar conocimientos en más proyectos reales durante la carrera, conectando la teoría con la práctica y permitiendo que desarrollen soluciones que los preparen directamente para su futuro profesional."}
+    ]
 
-    # Dividir las sugerencias en grupos de 3 para cada fila de columnas
-    for i in range(0, len(sugerencias), num_cols):
-        cols = st.columns(num_cols)  # Crear las columnas
+    # Calcular los promedios de competencia por área utilizando el DataFrame `melted_df`
+    promedios_secciones = {
+        'Fundamentos de la Computación': melted_df[melted_df['Pregunta'].str.contains('Fundamentos de la Computación')]['Respuesta'].mean(),
+        'Ingeniería de Datos': melted_df[melted_df['Pregunta'].str.contains('Ingeniería de Datos')]['Respuesta'].mean(),
+        'Ingeniería de Software': melted_df[melted_df['Pregunta'].str.contains('Ingeniería de Software')]['Respuesta'].mean(),
+        'Sistemas': melted_df[melted_df['Pregunta'].str.contains('Sistemas')]['Respuesta'].mean()
+    }
 
-        # Iterar sobre las sugerencias y asignar a las columnas
-        for j, sugerencia in enumerate(sugerencias[i:i+num_cols]):
-            with cols[j]:
-                st.markdown(f"""
-                <div class="card">
-                    <div class="card-title">{sugerencia['title']}</div>
-                    <div class="card-text">{sugerencia['text']}</div>
-                </div>
-                """, unsafe_allow_html=True)
+    # Crear columnas principales para sugerencias y promedios
+    cols = st.columns(2)
+
+    # Mostrar sugerencias en la primera columna
+    with cols[0]:
+        st.title("Sugerencias para Mejorar la Formación Académica")
+        st.write("A continuación se muestran algunas de las sugerencias que fueron mencionadas por los encuestados para mejorar la formación académica en la carrera de Ingeniería en Computación.")
+        # Dividir las sugerencias para que aparezcan una debajo de la otra
+        for sugerencia in sugerencias:
+            st.markdown(f"""
+            <div class="card">
+                <div class="card-title">{sugerencia['title']}</div>
+                <div class="card-text">{sugerencia['text']}</div>
+            </div>
+            """, unsafe_allow_html=True)
+
+    # Mostrar los promedios en la segunda columna
+    with cols[1]:
+        st.title("Promedio de Competencia por Área")
+        st.write("A continuación se muestran los promedios de competencia de las preguntas sobre el perfil de egreso de la carrera.")
+        # Dividir los promedios para que aparezcan uno debajo del otro
+        for nombre_seccion, promedio in promedios_secciones.items():
+            st.markdown(f"""
+            <div class="card">
+                <div class="card-title">{nombre_seccion}</div>
+                <div class="card-text">Promedio de Competencia: {promedio:.2f}</div>
+            </div>
+            """, unsafe_allow_html=True)

@@ -378,7 +378,7 @@ with tab1:
         # Definir las categorías
         categorias_disponibles = {
             "Ingeniería de Software": ['Metodologías Ágiles', 'Arquitectura de Software', 'QA', 'Control de Versiones', 'Despliegue de Aplicaciones', 'Diseño de Software'],
-            "Ingeniería de Datos": ['BD Relacionales', 'BD No Relacionales', 'Machine Learning', 'Procesos ETL', 'IA (LLM NLP RN)', 'Big Data', 'Análisis de Datos'],
+            "Ingeniería de Datos": ['BD Relacionales', 'BD No Relacionales', 'Machine Learning', 'Procesos ETL', 'IA (LLM NLP RN)', 'Big Data', 'Análisis de Datos','Almacenamiento de Datos'],
             "Ingeniería de Sistemas (+ Cloud y Habilidades Profesionales)": ['Redes','Ciberseguridad','Virtualización', 'Windows', 'Linux','Cloud','Habilidades Profesionales']
         }
 
@@ -430,7 +430,7 @@ with tab1:
                 angularaxis=dict(
                     showline=False,
                     gridcolor='#555',  # Color de las líneas del grid angular
-                    tickfont=dict(size=14, color='#ffffff')  # Texto blanco para el eje angular (categorías)
+                    tickfont=dict(size=13, color='#ffffff')  # Texto blanco para el eje angular (categorías)
                 ),
                 bgcolor='#1c1f26',  # Fondo del radar para que coincida con el estilo oscuro
             ),
@@ -444,11 +444,15 @@ with tab1:
         )
         # Mostrar el gráfico de radar en Streamlit
         st.plotly_chart(fig_radar, use_container_width=True)
-
+        # Verificar si la categoría seleccionada es "Ingeniería de Datos" y si "Análisis de Datos" está en la lista de preguntas
+        if categoria_seleccionada == "Ingeniería de Datos":
+            # Mostrar el mensaje
+            st.markdown("<p style='color: #ffffff; font-size: 16px;'>Análisis de Datos: se refiere a herramientas de Python como pandas, numpy, scipy, entre otras.</p>", unsafe_allow_html=True)
+            st.markdown("<p style='color: #ffffff; font-size: 16px;'>Almacenamiento de Datos: se refiere a arquitecturas de almacenamiento como Data Lakes y Data Warehouses.</p>", unsafe_allow_html=True)
 
 
     #Separador
-    #st.markdown("<hr>", unsafe_allow_html=True)
+    st.markdown("<hr>", unsafe_allow_html=True)
 
     ########################## Títulos para cada columna ##########################
     col1, col2 = st.columns(2)
@@ -538,8 +542,8 @@ with tab1:
         # Definir las áreas y sus preguntas asociadas
         areas = {
             "Ingeniería de Software": ['Python (Software)', 'Java', 'JavaScript', 'TypeScript', 'Ruby Go C', 'Arquitectura de Software','QA','Control de Versiones','Despliegue de Aplicaciones','Diseño de Software','Metodologías Ágiles','SQL','Habilidades Profesionales','Cloud','React','Vue','Angular','HTML y CSS','Spring Boot','Django','Rails','Nodejs (Frameworks)' ],
-            "Ingeniería de Datos": ['Python (Datos)', 'R', 'SQL', 'PowerBI', 'Tableau','Machine Learning','Procesos ETL','IA (LLM NLP RN)','Big Data','Análisis de Datos','BD Relacionales','BD No Relacionales','Cloud','Habilidades Profesionales'],
-            "Ingeniería en Sistemas": ['Cloud','Redes','Ciberseguridad','Habilidades Profesionales','Virtualización','Windows','Linux'] 
+            "Ingeniería de Datos": ['Python (Datos)', 'R', 'SQL', 'PowerBI', 'Tableau','Machine Learning','Procesos ETL','IA (LLM NLP RN)','Big Data','Análisis de Datos','BD Relacionales','BD No Relacionales','Cloud','Habilidades Profesionales','Almacenamiento de Datos'],
+            "Ingeniería en Sistemas": ['Cloud','Redes','Ciberseguridad','Habilidades Profesionales','Virtualización','Windows','Linux','SQL'] 
         }
 
          # Mostrar las tarjetas una debajo de la otra

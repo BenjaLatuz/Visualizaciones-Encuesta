@@ -278,15 +278,6 @@ with tab1:
     total_items = len(technologies)
     num_pages = (total_items + num_items_per_page - 1) // num_items_per_page  # Número total de páginas
 
-    # Botones para avanzar y retroceder páginas
-    col1, col2, col3 = st.columns([1, 8, 1])
-
-    with col1:
-        st.button("Anterior", disabled=st.session_state.current_page == 0, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page - 1))
-
-    with col3:
-        st.button("Siguiente", disabled=st.session_state.current_page >= num_pages - 1, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page + 1))
-
     # Calcular el índice de inicio y final para mostrar las tecnologías de la página actual
     start_idx = st.session_state.current_page * num_items_per_page
     end_idx = min(start_idx + num_items_per_page, total_items)
@@ -303,8 +294,25 @@ with tab1:
                 <div class="metric-freq">{tech['frequency']}</div>
             </div>
             """, unsafe_allow_html=True)
-    # Mostrar el número de página actual
-    st.write(f"Página {st.session_state.current_page + 1} de {num_pages}")
+
+    # Agregar un espacio para separar las tarjetas de los botones
+    st.markdown("<br><br>", unsafe_allow_html=True)
+
+    # Crear columnas adicionales para agregar espacio a los lados
+    espacio_izq, col1, col2, col3, espacio_der = st.columns([2, 1, 2, 1, 2])  # Añadir espacio a la izquierda y derecha
+
+    # Botón "Anterior" en la segunda columna
+    with col1:
+        st.button("Anterior", disabled=st.session_state.current_page == 0, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page - 1))
+
+    # Información de la página en la tercera columna (centrada)
+    with col2:
+        st.markdown(f"<div style='text-align: center;'>Página {st.session_state.current_page + 1} de {num_pages}</div>", unsafe_allow_html=True)
+
+    # Botón "Siguiente" en la cuarta columna
+    with col3:
+        st.button("Siguiente", disabled=st.session_state.current_page >= num_pages - 1, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page + 1))
+
 
     #Separador
     st.markdown("<hr>", unsafe_allow_html=True)
@@ -368,10 +376,10 @@ with tab1:
 
         # Ajustar el layout del gráfico
         fig.update_layout(
-            title=dict(text=f'Desarrollo de {selected_tech_category}', font=dict(size=18, color='#ffffff')),  # Texto blanco para el título
-            xaxis_title=dict(text='Respuestas', font=dict(size=18, color='#ffffff')),  # Texto blanco para el título del eje X
-            yaxis_title=dict(text='Frecuencia', font=dict(size=18, color='#ffffff')),  # Texto blanco para el título del eje Y
-            legend=dict(font=dict(size=14, color='#ffffff')),  # Texto blanco para las leyendas
+            title=dict(text=f'Desarrollo de {selected_tech_category}', font=dict(size=16, color='#ffffff')), 
+            xaxis_title=dict(text='Respuestas', font=dict(size=18, color='#ffffff')),  
+            yaxis_title=dict(text='Frecuencia', font=dict(size=18, color='#ffffff')),  
+            legend=dict(font=dict(size=14, color='#ffffff')),  
             barmode='group',  # Estilo multibarra
             yaxis=dict(
                 tickmode='linear', 
@@ -461,13 +469,13 @@ with tab1:
                 ),
                 bgcolor='#1c1f26',  # Fondo del radar para que coincida con el estilo oscuro
             ),
-            title=dict(text=f"Promedio de Respuestas por {categoria_seleccionada}", font=dict(size=18, color='#ffffff')),  # Texto blanco para el título
+            title=dict(text=f"Promedio de Respuestas por {categoria_seleccionada}", font=dict(size=16, color='#ffffff')),  # Texto blanco para el título
             plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
             paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
             font=dict(color='#ffffff'),  # Texto blanco en general
             margin=dict(l=115, r=115, t=115, b=115),  # Aumentar márgenes laterales
             height=600,
-            width=800  # Ajustar el tamaño como desees
+            width=600  # Ajustar el tamaño como desees
         )
         # Mostrar el gráfico de radar en Streamlit
         st.plotly_chart(fig_radar, use_container_width=True)
@@ -547,7 +555,7 @@ with tab1:
             xaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje X
             yaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje Y
             height=600,  # Ajustar el tamaño del gráfico
-            width=800,
+            width=600,
             plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
             paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
             font=dict(color='#ffffff'),  # Asegurarse de que todo el texto sea blanco
@@ -642,7 +650,13 @@ with tab2:
             text=grouped_df['Texto'],  # Mostrar el texto con la frecuencia y el porcentaje
             textposition='auto',
             marker=dict(color='rgba(31, 119, 180, 1)'),  # Color azul para las barras
-            textfont=dict(color='white')  # Texto blanco dentro de las barras
+            textfont=dict(color='white'),  # Texto blanco dentro de las barras
+            hovertemplate=(
+                '<b>Respuesta:</b> %{x}<br>' +
+                '<b>Frecuencia:</b> %{y}<br>' +
+                '<b>Porcentaje:</b> %{customdata:.2f}%<extra></extra>'
+            ),
+            customdata=grouped_df['Porcentaje']  # Pasar el porcentaje como customdata para usar en el hovertemplate
         ))
 
         # Ajustar el layout del gráfico
@@ -670,7 +684,8 @@ with tab2:
             plot_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
             paper_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
             font=dict(color='#ffffff'),  # Texto general en blanco
-            height=600  # Tamaño del gráfico
+            height=500,
+            width=500
         )
 
         return fig
@@ -728,7 +743,7 @@ with tab2:
 
     # Mostrar sugerencias en la primera columna
     with cols[0]:
-        st.title("Sugerencias para Mejorar la Formación Académica")
+        st.header("Sugerencias para Mejorar la Formación Académica")
         st.write("A continuación se muestran algunas de las sugerencias que fueron mencionadas por los encuestados para mejorar la formación académica en la carrera de Ingeniería en Computación.")
         # Dividir las sugerencias para que aparezcan una debajo de la otra
         for sugerencia in sugerencias:
@@ -741,7 +756,7 @@ with tab2:
 
     # Mostrar los promedios en la segunda columna
     with cols[1]:
-        st.title("Promedio de Competencia por Área")
+        st.header("Promedio de Competencia por Área")
         st.write("A continuación se muestran los promedios de competencia de las preguntas sobre el perfil de egreso de la carrera.")
         # Dividir los promedios para que aparezcan uno debajo del otro
         for nombre_seccion, promedio in promedios_secciones.items():

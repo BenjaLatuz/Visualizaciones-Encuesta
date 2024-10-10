@@ -298,20 +298,19 @@ with tab1:
     # Agregar un espacio para separar las tarjetas de los botones
     st.markdown("<br><br>", unsafe_allow_html=True)
 
-    # Crear columnas adicionales para agregar espacio a los lados
-    espacio_izq, col1, col2, col3, espacio_der = st.columns([2.5, 0.5, 1, 1.5, 1.5])  # Añadir espacio a la izquierda y derecha
+    # Crear columnas para los botones
+    cols = st.columns(9)
 
-    # Botón "Anterior" en la segunda columna
-    with col1:
+    with cols[3]:
         st.button("Anterior", disabled=st.session_state.current_page == 0, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page - 1))
 
-    # Información de la página en la tercera columna (centrada)
-    with col2:
-        st.markdown(f"<div style='text-align: center;'>Página {st.session_state.current_page + 1} de {num_pages}</div>", unsafe_allow_html=True)
+    with cols[4]:
+        st.write(f"Página {st.session_state.current_page + 1} de {num_pages}")
 
-    # Botón "Siguiente" en la cuarta columna
-    with col3:
+    with cols[5]:
         st.button("Siguiente", disabled=st.session_state.current_page >= num_pages - 1, on_click=lambda: st.session_state.update(current_page=st.session_state.current_page + 1))
+
+    
 
 
     #Separador

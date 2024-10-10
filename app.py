@@ -400,8 +400,8 @@ with tab1:
             plot_bgcolor='#1c1f26',  # Fondo oscuro como tu estilo de Streamlit
             paper_bgcolor='#1c1f26',
             font=dict(color='#ffffff'),  # Asegurar que todo el texto sea blanco
-            height=600,
-            width=600  # Ajustar tamaño para asegurar que se vea bien en pantallas grandes y pequeñas
+            #Tamaño automático
+            autosize=True
         )
         
         st.plotly_chart(fig, use_container_width=True)
@@ -472,9 +472,8 @@ with tab1:
             plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
             paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
             font=dict(color='#ffffff'),  # Texto blanco en general
-            margin=dict(l=115, r=115, t=115, b=115),  # Aumentar márgenes laterales
-            height=600,
-            width=600  # Ajustar el tamaño como desees
+            #margin=dict(l=115, r=115, t=115, b=115),  # Aumentar márgenes laterales
+            autosize=True
         )
         # Mostrar el gráfico de radar en Streamlit
         st.plotly_chart(fig_radar, use_container_width=True)
@@ -553,8 +552,7 @@ with tab1:
             yaxis_title=dict(text="Lenguajes y Herramientas", font=dict(size=18, color='#ffffff')),  # Texto blanco para la etiqueta del eje Y
             xaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje X
             yaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje Y
-            height=600,  # Ajustar el tamaño del gráfico
-            width=600,
+            autosize=True,
             plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
             paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
             font=dict(color='#ffffff'),  # Asegurarse de que todo el texto sea blanco
@@ -683,8 +681,7 @@ with tab2:
             plot_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
             paper_bgcolor='#1c1f26',  # Fondo del gráfico oscuro
             font=dict(color='#ffffff'),  # Texto general en blanco
-            height=500,
-            width=500
+            autosize=True
         )
 
         return fig

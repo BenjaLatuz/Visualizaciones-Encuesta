@@ -376,13 +376,13 @@ with tab1:
         # Ajustar el layout del gráfico
         fig.update_layout(
             title=dict(text=f'Desarrollo de {selected_tech_category}', font=dict(size=16, color='#ffffff')), 
-            xaxis_title=dict(text='Respuestas', font=dict(size=18, color='#ffffff')),  
-            yaxis_title=dict(text='Frecuencia', font=dict(size=18, color='#ffffff')),  
+            xaxis_title=dict(text='Respuestas', font=dict(size=16, color='#ffffff')),  
+            yaxis_title=dict(text='Frecuencia', font=dict(size=16, color='#ffffff')),  
             legend=dict(font=dict(size=14, color='#ffffff')),  
             barmode='group',  # Estilo multibarra
             yaxis=dict(
                 tickmode='linear', 
-                tickfont=dict(size=18, color='#ffffff'),  # Texto blanco para los ticks del eje Y
+                tickfont=dict(size=14, color='#ffffff'),  # Texto blanco para los ticks del eje Y
                 gridcolor='#555',  # Color gris para las líneas del grid en el eje Y
                 zeroline=True,  # Mantener la línea cero
                 zerolinecolor='#555',  # Asegurar que la línea cero sea gris
@@ -390,7 +390,7 @@ with tab1:
                 showline=False,  # No mostrar la línea adicional en la parte inferior del eje Y
             ),
             xaxis=dict(
-                tickfont=dict(size=18, color='#ffffff'),  # Texto blanco para los ticks del eje X
+                tickfont=dict(size=14, color='#ffffff'),  # Texto blanco para los ticks del eje X
                 gridcolor='#555',  # Color gris para las líneas del grid en el eje X
                 zeroline=True,  # Mantener la línea cero
                 zerolinecolor='#555',  # Asegurar que la línea cero sea gris
@@ -459,7 +459,7 @@ with tab1:
                     ticktext=['0', '1', '2', '3', '4', '5'],  # Mostrar los valores de 0 a 5
                     showline=False,  # Ocultar líneas radiales
                     gridcolor='#555',  # Color de las líneas del grid
-                    tickfont=dict(size=14, color='#ffffff'),  # Texto blanco para el eje radial
+                    tickfont=dict(size=13, color='#ffffff'),  # Texto blanco para el eje radial
                 ),
                 angularaxis=dict(
                     showline=False,
@@ -548,10 +548,10 @@ with tab1:
 
         # Ajustar el layout del gráfico
         fig.update_layout(
-            xaxis_title=dict(text="Competencia", font=dict(size=18, color='#ffffff')),  # Texto blanco para la etiqueta del eje X
-            yaxis_title=dict(text="Lenguajes y Herramientas", font=dict(size=18, color='#ffffff')),  # Texto blanco para la etiqueta del eje Y
-            xaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje X
-            yaxis=dict(tickfont=dict(size=18, color='#ffffff')),  # Texto blanco para las etiquetas del eje Y
+            xaxis_title=dict(text="Competencia", font=dict(size=14, color='#ffffff')),  # Texto blanco para la etiqueta del eje X
+            yaxis_title=dict(text="Lenguajes y Herramientas", font=dict(size=14, color='#ffffff')),  # Texto blanco para la etiqueta del eje Y
+            xaxis=dict(tickfont=dict(size=14, color='#ffffff')),  # Texto blanco para las etiquetas del eje X
+            yaxis=dict(tickfont=dict(size=14, color='#ffffff')),  # Texto blanco para las etiquetas del eje Y
             autosize=True,
             plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
             paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
@@ -663,7 +663,7 @@ with tab2:
             xaxis=dict(
                 tickmode='array',
                 tickvals=[1, 2, 3, 4, 5],  # Mostrar solo los valores 1-5 en el eje X
-                tickfont=dict(color='#ffffff'),  # Color blanco para los números del eje X
+                tickfont=dict(size=14,color='#ffffff'),  # Color blanco para los números del eje X
                 gridcolor='#555',  # Color gris para las líneas del grid en el eje X
                 zeroline=True,  # Mantener la línea cero
                 zerolinecolor='#555',  # Color gris para la línea cero
@@ -671,7 +671,7 @@ with tab2:
                 showline=False  # No mostrar la línea adicional en el borde del eje X
             ),
             yaxis=dict(
-                tickfont=dict(color='#ffffff'),  # Color blanco para los números del eje Y
+                tickfont=dict(size=14, color='#ffffff'),  # Color blanco para los números del eje Y
                 gridcolor='#555',  # Color gris para las líneas del grid en el eje Y
                 zeroline=True,  # Mantener la línea cero
                 zerolinecolor='#555',  # Color gris para la línea cero

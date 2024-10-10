@@ -299,7 +299,7 @@ with tab1:
     st.markdown("<br><br>", unsafe_allow_html=True)
 
     # Crear columnas adicionales para agregar espacio a los lados
-    espacio_izq, col1, col2, col3, espacio_der = st.columns([2, 1, 2, 1, 2])  # Añadir espacio a la izquierda y derecha
+    espacio_izq, col1, col2, col3, espacio_der = st.columns([2.5, 0.5, 1, 1.5, 1.5])  # Añadir espacio a la izquierda y derecha
 
     # Botón "Anterior" en la segunda columna
     with col1:

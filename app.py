@@ -567,15 +567,15 @@ with tab1:
         st.write("""
         A continuación se muestra el promedio de competencia por área de la ingeniería en computación. Las áreas consideradas son Ingeniería de Software, Ingeniería de Datos y Sistemas. 
 
-        Este análisis incluye todas las preguntas relacionadas con ofertas laborales de la encuesta. Además, se ha considerado que las competencias en **Habilidades Profesionales**, **SQL**, y **Herramientas Cloud** son transversales y aplican a las tres áreas mencionadas, ya que son altamente demandadas en el ámbito laboral en todas las disciplinas de la Ingeniería en Computación.
+        Este análisis incluye todas las preguntas relacionadas con ofertas laborales de la encuesta. Además, se ha considerado que las competencias en **Habilidades Profesionales**, **SQL**, **Herramientas Cloud** y **Bases de Datos Relacionales y No Relacionales** son transversales y aplican a las tres áreas mencionadas, ya que son altamente demandadas en el ámbito laboral en todas las disciplinas de la Ingeniería en Computación.
         """)
     
     #with col4:
         # Definir las áreas y sus preguntas asociadas
         areas = {
-            "Ingeniería de Software": ['Python (Software)', 'Java', 'JavaScript', 'TypeScript', 'Ruby Go C', 'Arquitectura de Software','QA','Control de Versiones','Despliegue de Aplicaciones','Diseño de Software','Metodologías Ágiles','SQL','Habilidades Profesionales','Cloud','React','Vue','Angular','HTML y CSS','Spring Boot','Django','Rails','Nodejs (Frameworks)' ],
+            "Ingeniería de Software": ['Python (Software)', 'Java', 'JavaScript', 'TypeScript', 'Ruby Go C', 'Arquitectura de Software','QA','Control de Versiones','Despliegue de Aplicaciones','Diseño de Software','Metodologías Ágiles','SQL','Habilidades Profesionales','Cloud','React','Vue','Angular','HTML y CSS','Spring Boot','Django','Rails','Nodejs (Frameworks)','BD Relacionales','BD No Relacionales'],
             "Ingeniería de Datos": ['Python (Datos)', 'R', 'SQL', 'PowerBI', 'Tableau','Machine Learning','Procesos ETL','IA (LLM NLP RN)','Big Data','Análisis de Datos','BD Relacionales','BD No Relacionales','Cloud','Habilidades Profesionales','Almacenamiento de Datos'],
-            "Ingeniería en Sistemas": ['Cloud','Redes','Ciberseguridad','Habilidades Profesionales','Virtualización','Windows','Linux','SQL'] 
+            "Ingeniería en Sistemas": ['Cloud','Redes','Ciberseguridad','Habilidades Profesionales','Virtualización','Windows','Linux','SQL','BD Relacionales','BD No Relacionales'] 
         }
 
          # Mostrar las tarjetas una debajo de la otra

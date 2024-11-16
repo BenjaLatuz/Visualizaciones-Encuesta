@@ -342,7 +342,7 @@ with tab1:
         ########################## FRONTEND y BACKEND ##########################
         category_switch = {
             "Frontend": ['React', 'Vue', 'Angular', 'HTML y CSS'],
-            "Backend": ['Spring Boot', 'Django', 'Rails', 'Nodejs (Frameworks)']
+            "Backend": ['Spring Boot', 'Django', 'Rails', 'Express/Nest/Next']
         }
 
         selected_technologies = category_switch[selected_tech_category]

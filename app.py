@@ -500,7 +500,7 @@ with tab1:
     ########################## Lenguajes de Programación + SQL ##########################    
     #with col3:
         # Seleccionar las preguntas para el mapa de calor
-        preguntas_seleccionadas_1 = ['Python (Software)', 'R', 'Java', 'JavaScript', 'TypeScript', 'Python (Datos)', 'Ruby Go C', 'SQL', 'PowerBI', 'Tableau']
+        preguntas_seleccionadas_1 = ['Python (Software)', 'R', 'Java', 'JavaScript', 'TypeScript', 'Python (Datos)', 'Ruby Go C#', 'SQL', 'PowerBI', 'Tableau']
         filtered_df_1 = melted_df[melted_df['Pregunta'].isin(preguntas_seleccionadas_1)]
 
         # Calcular el promedio de respuestas para cada lenguaje de programación
@@ -558,7 +558,8 @@ with tab1:
             plot_bgcolor='#1c1f26',  # Fondo oscuro del gráfico
             paper_bgcolor='#1c1f26',  # Fondo oscuro del papel
             font=dict(color='#ffffff'),  # Asegurarse de que todo el texto sea blanco
-            showlegend=False  # Deshabilitar todas las leyendas
+            showlegend=False,  # Deshabilitar todas las leyendas
+            title=dict(text=f"Promedio de Respuestas en Lenguajes de Programación (+SQL) y Herramientas de Visualización", font=dict(size=16, color='#ffffff')),  # Texto blanco para el título
         )
 
         # Mostrar el gráfico en Streamlit

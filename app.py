@@ -411,10 +411,10 @@ with tab1:
         
         # Definir las categorías
         categorias_disponibles = {
-            "Aspectos Generales": ['BD No Relacionales','BD Relacionales','Cloud','Habilidades Profesionales'],
+            "Ámbitos Generales": ['BD No Relacionales','BD Relacionales','Cloud','Habilidades Profesionales'],
             "Ingeniería de Software": ['Metodologías Ágiles', 'Arquitectura de Software', 'QA', 'Control de Versiones', 'Despliegue de Aplicaciones', 'Diseño de Software'],
             "Ingeniería de Datos": ['Machine Learning', 'Procesos ETL', 'IA (LLM NLP RN)', 'Big Data', 'Análisis de Datos','Almacenamiento de Datos'],
-            "Ingeniería de Sistemas": ['Redes','Ciberseguridad','Virtualización', 'Windows', 'Linux']
+            "Sistemas": ['Redes','Ciberseguridad','Virtualización', 'Windows', 'Linux']
             
         }
 

@@ -741,20 +741,20 @@ with tab2:
     cols = st.columns(2)
 
     # Mostrar sugerencias en la primera columna
-    with cols[0]:
-        st.header("Sugerencias para Mejorar la Formación Académica")
-        st.write("A continuación se muestran algunas de las sugerencias que fueron mencionadas por los encuestados para mejorar la formación académica en la carrera de Ingeniería en Computación.")
-        # Dividir las sugerencias para que aparezcan una debajo de la otra
-        for sugerencia in sugerencias:
-            st.markdown(f"""
-            <div class="card">
-                <div class="card-title">{sugerencia['title']}</div>
-                <div class="card-text">{sugerencia['text']}</div>
-            </div>
-            """, unsafe_allow_html=True)
+    #with cols[1]:
+    #    st.header("Sugerencias para Mejorar la Formación Académica")
+    #    st.write("A continuación se muestran algunas de las sugerencias que fueron mencionadas por los encuestados para mejorar la formación académica en la carrera de Ingeniería en Computación.")
+    #    # Dividir las sugerencias para que aparezcan una debajo de la otra
+    #    for sugerencia in sugerencias:
+    #        st.markdown(f"""
+    #        <div class="card">
+    #            <div class="card-title">{sugerencia['title']}</div>
+    #            <div class="card-text">{sugerencia['text']}</div>
+    #        </div>
+    #        """, unsafe_allow_html=True)
 
     # Mostrar los promedios en la segunda columna
-    with cols[1]:
+    with cols[0]:
         st.header("Promedio de Competencia por Área")
         st.write("A continuación se muestran los promedios de competencia de las preguntas sobre el perfil de egreso de la carrera.")
         # Dividir los promedios para que aparezcan uno debajo del otro
